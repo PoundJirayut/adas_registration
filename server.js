@@ -71,7 +71,13 @@ app.post('/api/register', async (req, res) => {
     if (imageUrl) scriptParams.set('imageUrl', imageUrl);
 
     const resp = await axios.get(`${SCRIPT_URL}?${scriptParams.toString()}`);
-    res.json(resp.data);
+    const data = resp.data;
+    if (data.driveError) {
+      console.warn('[/api/register] Drive upload warning:', data.driveError);
+    } else if (data.driveUrl) {
+      console.log('[/api/register] Drive upload OK:', data.driveUrl);
+    }
+    res.json(data);
   } catch (err) {
     console.error('[/api/register]', err.message);
     res.status(500).json({ success: false, message: err.message });
