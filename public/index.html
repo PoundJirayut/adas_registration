@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paper Registration — ADAS Conference</title>
+<title>Paper Registration — APSIPA Conference</title>
 <style>
 /* ── Tokens ────────────────────────────────────────────────── */
 :root {
@@ -572,7 +572,7 @@ input{font-family:inherit}
 <!-- ── Site Header ───────────────────────────────────────── -->
 <header class="site-header">
   <div class="hd-inner">
-    <div class="hd-conf">ADAS Conference</div>
+    <div class="hd-conf">APSIPA Conference</div>
     <h1 class="hd-title">Paper Registration</h1>
     <p class="hd-sub">Confirm your paper attendance by completing registration</p>
 
@@ -803,13 +803,20 @@ function enterCard(id) {
   el.offsetHeight; // force reflow so animation restarts
   el.classList.add('card-enter');
   el.addEventListener('animationend', () => el.classList.remove('card-enter'), { once: true });
-  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// Exit old cards while simultaneously entering new card
+// Exit old cards first, then enter new card (sequential to avoid layout shift)
 function transitTo(hideIds, showId) {
-  hideIds.forEach(id => exitCard(id));
-  setTimeout(() => enterCard(showId), 60);
+  const visible = hideIds.filter(id => {
+    const el = document.getElementById(id);
+    return el && !el.classList.contains('hidden');
+  });
+  if (visible.length === 0) { enterCard(showId); return; }
+  let done = 0;
+  visible.forEach(id => exitCard(id, () => {
+    done++;
+    if (done === visible.length) enterCard(showId);
+  }));
 }
 
 // ── Step tracker ───────────────────────────────────────────────
