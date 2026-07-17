@@ -9,7 +9,9 @@
       "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test01\"}')",
       "Bash(python3 -m json.tool --no-ensure-ascii)",
       "Bash(node /Users/jirayut/Documents/Inetms_pre_work/adas_registration/server.js)",
-      "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test02\",\"imageBase64\":\"__TRACKED_VAR__\"}')"
+      "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test02\",\"imageBase64\":\"__TRACKED_VAR__\"}')",
+      "Skill(artifact-design)",
+      "Skill(artifact-design:*)"
     ]
   }
 }

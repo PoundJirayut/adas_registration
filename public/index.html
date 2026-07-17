@@ -7,327 +7,618 @@
 <style>
 /* ── Tokens ────────────────────────────────────────────────── */
 :root {
-  --bg:         #EBF0FA;
-  --surface:    #FFFFFF;
-  --surface-2:  #F4F7FD;
-  --border:     #D2DDEF;
-  --text-1:     #19305A;
-  --text-2:     #4B637F;
-  --text-3:     #859BB8;
-  --accent:     #2055D4;
-  --accent-dim: #EBF0FF;
-  --accent-hi:  #1644B8;
-  --ok:         #0B8A5C;
-  --ok-bg:      #E8FBF3;
-  --ok-text:    #065240;
-  --warn:       #C07A00;
-  --warn-bg:    #FFF7E0;
-  --warn-text:  #7A4E00;
-  --shadow:     0 2px 10px rgba(25,48,90,.07), 0 1px 2px rgba(25,48,90,.04);
-  --r: 12px; --r-sm: 8px; --r-xs: 5px;
+  --hd:          #0B1027;
+  --bg:          #F0F4FF;
+  --surface:     #FFFFFF;
+  --surface-2:   #F5F7FF;
+  --border:      #E0E6F8;
+  --text-1:      #0B1027;
+  --text-2:      #3D4F78;
+  --text-3:      #8A9AC0;
+  --accent:      #2B4EFF;
+  --accent-dim:  #EEF1FF;
+  --accent-hi:   #1A3AE0;
+  --ok:          #059669;
+  --ok-bg:       #ECFDF5;
+  --ok-text:     #065F46;
+  --warn:        #D97706;
+  --warn-bg:     #FFFBEB;
+  --warn-text:   #92400E;
+  --shadow-sm:   0 1px 3px rgba(11,16,39,.06);
+  --shadow-md:   0 4px 16px rgba(11,16,39,.09), 0 1px 3px rgba(11,16,39,.04);
+  --shadow-lg:   0 8px 32px rgba(11,16,39,.12), 0 2px 6px rgba(11,16,39,.06);
+  --r:           14px;
+  --r-sm:        9px;
+  --r-xs:        5px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:#0C1628; --surface:#132039; --surface-2:#192A4A; --border:#223358;
-    --text-1:#D8E5F8; --text-2:#7A98BF; --text-3:#45607F;
-    --accent:#4B80FF; --accent-dim:#101E40; --accent-hi:#3669E0;
-    --ok:#2DD4A4; --ok-bg:#041F15; --ok-text:#2DD4A4;
-    --warn:#F5C540; --warn-bg:#1E1400; --warn-text:#F5C540;
-    --shadow: 0 2px 10px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.15);
+    --hd:#0B1027;
+    --bg:#070D1E; --surface:#0F1629; --surface-2:#172038;
+    --border:#1E2D50; --text-1:#E0E8FF; --text-2:#6A85B8; --text-3:#324060;
+    --accent:#5B78FF; --accent-dim:#0D1640; --accent-hi:#4060EE;
+    --ok:#34D399; --ok-bg:#022C22; --ok-text:#34D399;
+    --warn:#FCD34D; --warn-bg:#1C1000; --warn-text:#FCD34D;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.3);
+    --shadow-md:0 4px 16px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.2);
+    --shadow-lg:0 8px 32px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.25);
   }
 }
-:root[data-theme="light"] {
-  --bg:#EBF0FA; --surface:#FFF; --surface-2:#F4F7FD; --border:#D2DDEF;
-  --text-1:#19305A; --text-2:#4B637F; --text-3:#859BB8;
-  --accent:#2055D4; --accent-dim:#EBF0FF; --accent-hi:#1644B8;
-  --ok:#0B8A5C; --ok-bg:#E8FBF3; --ok-text:#065240;
-  --warn:#C07A00; --warn-bg:#FFF7E0; --warn-text:#7A4E00;
-  --shadow:0 2px 10px rgba(25,48,90,.07),0 1px 2px rgba(25,48,90,.04);
+:root[data-theme="light"]{
+  --hd:#0B1027;--bg:#F0F4FF;--surface:#FFF;--surface-2:#F5F7FF;--border:#E0E6F8;
+  --text-1:#0B1027;--text-2:#3D4F78;--text-3:#8A9AC0;
+  --accent:#2B4EFF;--accent-dim:#EEF1FF;--accent-hi:#1A3AE0;
+  --ok:#059669;--ok-bg:#ECFDF5;--ok-text:#065F46;
+  --warn:#D97706;--warn-bg:#FFFBEB;--warn-text:#92400E;
+  --shadow-sm:0 1px 3px rgba(11,16,39,.06);
+  --shadow-md:0 4px 16px rgba(11,16,39,.09),0 1px 3px rgba(11,16,39,.04);
+  --shadow-lg:0 8px 32px rgba(11,16,39,.12),0 2px 6px rgba(11,16,39,.06);
 }
-:root[data-theme="dark"] {
-  --bg:#0C1628; --surface:#132039; --surface-2:#192A4A; --border:#223358;
-  --text-1:#D8E5F8; --text-2:#7A98BF; --text-3:#45607F;
-  --accent:#4B80FF; --accent-dim:#101E40; --accent-hi:#3669E0;
-  --ok:#2DD4A4; --ok-bg:#041F15; --ok-text:#2DD4A4;
-  --warn:#F5C540; --warn-bg:#1E1400; --warn-text:#F5C540;
-  --shadow:0 2px 10px rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.15);
+:root[data-theme="dark"]{
+  --hd:#0B1027;--bg:#070D1E;--surface:#0F1629;--surface-2:#172038;
+  --border:#1E2D50;--text-1:#E0E8FF;--text-2:#6A85B8;--text-3:#324060;
+  --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;
+  --ok:#34D399;--ok-bg:#022C22;--ok-text:#34D399;
+  --warn:#FCD34D;--warn-bg:#1C1000;--warn-text:#FCD34D;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3);
+  --shadow-md:0 4px 16px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.2);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.25);
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  background: var(--bg);
-  color: var(--text-1);
-  min-height: 100vh;
-  padding: 2.5rem 1rem 4rem;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:15px;line-height:1.6;
+  background:var(--bg);color:var(--text-1);min-height:100vh;
 }
-button { font-family: inherit; cursor: pointer; }
-input  { font-family: inherit; }
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
 
-/* ── Layout ────────────────────────────────────────────────── */
-.wrap { max-width: 640px; margin: 0 auto; }
-
-/* ── Header ────────────────────────────────────────────────── */
-.hd { text-align: center; margin-bottom: 2.25rem; }
-.hd-eyebrow {
-  display: inline-block;
-  font-size: .6875rem; font-weight: 700;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--accent); background: var(--accent-dim);
-  padding: .25rem .75rem; border-radius: 99px; margin-bottom: .75rem;
+/* ── Site header ───────────────────────────────────────────── */
+.site-header {
+  background: var(--hd);
+  background-image:
+    linear-gradient(rgba(43,78,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43,78,255,.07) 1px, transparent 1px);
+  background-size: 36px 36px;
+  padding: 2.5rem 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::after {
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,120,255,.4),transparent);
+}
+.hd-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hd-conf {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(91,120,255,.9);
+  margin-bottom: .75rem;
 }
 .hd-title {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 800; line-height: 1.2; color: var(--text-1); text-wrap: balance;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+  margin-bottom: .5rem;
 }
-.hd-sub { margin-top: .5rem; font-size: .9rem; color: var(--text-2); }
+.hd-sub {
+  font-size: .875rem;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 2rem;
+}
 
-/* ── Card ──────────────────────────────────────────────────── */
+/* ── Step indicator ────────────────────────────────────────── */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding-bottom: 1.75rem;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .375rem;
+  position: relative;
+}
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.3);
+  transition: all .3s ease;
+  background: transparent;
+}
+.step-text {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+  transition: color .3s ease;
+  white-space: nowrap;
+}
+.step-connector {
+  width: clamp(32px, 8vw, 72px);
+  height: 1px;
+  background: rgba(255,255,255,.12);
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+/* Active step */
+.step-item.active .step-circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(91,120,255,.25);
+}
+.step-item.active .step-text { color: rgba(255,255,255,.9); }
+/* Done step */
+.step-item.done .step-circle {
+  background: rgba(91,120,255,.25);
+  border-color: rgba(91,120,255,.5);
+  color: rgba(255,255,255,.7);
+}
+.step-item.done .step-text { color: rgba(255,255,255,.4); }
+.step-connector.done { background: rgba(91,120,255,.3); }
+
+/* ── Main ──────────────────────────────────────────────────── */
+.main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.75rem 1rem 4rem;
+}
+
+/* ── Cards ─────────────────────────────────────────────────── */
 .card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r); box-shadow: var(--shadow); padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-md);
+  padding: 1.625rem;
 }
-.card + .card { margin-top: 1.125rem; }
-
-/* ── Section label ─────────────────────────────────────────── */
-.section-label {
-  font-size: .75rem; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--text-3); margin-bottom: .625rem;
+.card + .card { margin-top: 1rem; }
+.card-enter {
+  animation: fadeUp .22s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 
 /* ── Search ────────────────────────────────────────────────── */
-.search-row { display: flex; gap: .5rem; }
+.search-label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: .75rem;
+}
+.search-wrap {
+  display: flex;
+  gap: .5rem;
+  align-items: stretch;
+}
+.search-field {
+  flex: 1;
+  position: relative;
+}
+.search-icon-el {
+  position: absolute;
+  left: .875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  pointer-events: none;
+  display: flex;
+}
 .search-input {
-  flex: 1; padding: .625rem .875rem; font-size: .9375rem;
-  border: 1.5px solid var(--border); border-radius: var(--r-sm);
-  background: var(--surface-2); color: var(--text-1); outline: none;
-  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+  padding: .75rem .875rem .75rem 2.625rem;
+  font-size: .9375rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text-1);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  height: 100%;
 }
 .search-input::placeholder { color: var(--text-3); }
 .search-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(32,85,212,.13);
+  box-shadow: 0 0 0 3px rgba(91,120,255,.15);
   background: var(--surface);
 }
 
 /* ── Buttons ───────────────────────────────────────────────── */
 .btn {
-  padding: .625rem 1.125rem; font-size: .9375rem; font-weight: 600;
-  border: none; border-radius: var(--r-sm);
-  transition: background .15s, transform .1s, opacity .15s; white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  padding: .75rem 1.25rem;
+  font-size: .9375rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--r-sm);
+  transition: background .15s, transform .1s, box-shadow .15s, opacity .15s;
+  white-space: nowrap;
+  line-height: 1;
 }
-.btn:active { transform: scale(.98); }
-.btn-primary { background: var(--accent); color: #fff; }
+.btn:active { transform: scale(.97); }
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(43,78,255,.3);
+}
 .btn-primary:hover { background: var(--accent-hi); }
-.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-ghost {
-  background: transparent; color: var(--text-2);
+  background: transparent;
+  color: var(--text-2);
   border: 1.5px solid var(--border);
 }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-.btn-ok { background: var(--ok); color: #fff; }
-.btn-ok:hover { filter: brightness(1.08); }
-.btn-ok:disabled { opacity: .5; cursor: not-allowed; }
-
-/* ── State blocks ──────────────────────────────────────────── */
-.state { text-align: center; padding: 2.75rem 1rem; }
-.state-icon  { font-size: 1.75rem; margin-bottom: .625rem; }
-.state-label { font-size: .9375rem; font-weight: 500; color: var(--text-2); }
-.state-hint  { font-size: .8125rem; margin-top: .25rem; color: var(--text-3); }
-
-.spinner {
-  width: 24px; height: 24px; margin: 0 auto .75rem;
-  border: 2.5px solid var(--border); border-top-color: var(--accent);
-  border-radius: 50%; animation: spin .7s linear infinite;
+.btn-ok {
+  background: var(--ok);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(5,150,105,.25);
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+.btn-ok:hover { filter: brightness(1.08); }
+.btn-ok:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── States ────────────────────────────────────────────────── */
+.state { text-align:center; padding:3rem 1rem; }
+.state-icon { font-size:2rem; margin-bottom:.75rem; line-height:1; }
+.state-label { font-size:.9375rem; font-weight:600; color:var(--text-2); }
+.state-hint  { font-size:.8125rem; color:var(--text-3); margin-top:.3rem; }
+
+/* Skeleton loader */
+.skeleton { display:flex; flex-direction:column; gap:.75rem; padding:.5rem 0; }
+.skel-row {
+  height:56px; border-radius:var(--r-sm);
+  background:linear-gradient(90deg,var(--surface-2) 25%,var(--border) 50%,var(--surface-2) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+}
+.skel-row:nth-child(2){height:56px}
+.skel-row:nth-child(3){height:56px}
+@keyframes shimmer { to { background-position:-200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skel-row { animation: none; } }
+
+/* ── Section label ─────────────────────────────────────────── */
+.section-label {
+  font-size:.7rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-3);margin-bottom:.875rem;
+}
 
 /* ── Results ───────────────────────────────────────────────── */
 .results-hd {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: .75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.875rem;
 }
-.results-count { font-size: .8125rem; color: var(--text-3); }
-.result-list   { display: flex; flex-direction: column; gap: .5rem; }
+.results-count { font-size:.8125rem; color:var(--text-3); }
+.result-list   { display:flex;flex-direction:column;gap:.5rem; }
 
 .result-item {
-  display: grid; grid-template-columns: auto 1fr auto;
-  align-items: center; gap: .875rem;
-  padding: .875rem 1rem;
-  border: 1.5px solid var(--border); border-radius: var(--r-sm);
-  cursor: pointer; background: var(--surface);
-  transition: border-color .15s, background .15s, box-shadow .15s;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:.875rem;
+  padding:.9375rem 1rem;
+  border:1.5px solid var(--border);
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  background:var(--surface);
+  transition:border-color .15s, background .15s, box-shadow .15s, transform .1s;
+  position:relative;
 }
 .result-item:hover {
-  border-color: var(--accent); background: var(--accent-dim);
-  box-shadow: 0 0 0 1px var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-sm);
+  transform: translateY(-1px);
 }
-.result-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.result-item:active { transform: translateY(0); }
+.result-item:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 
 .result-pid {
-  font-family: 'SF Mono','Cascadia Code','Consolas', monospace;
-  font-size: .8rem; font-weight: 700; font-variant-numeric: tabular-nums;
-  background: var(--accent-dim); color: var(--accent);
-  padding: .2rem .5rem; border-radius: var(--r-xs); white-space: nowrap;
+  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-size:.7875rem;font-weight:700;
+  font-variant-numeric:tabular-nums;
+  background:var(--accent-dim);color:var(--accent);
+  padding:.25rem .5rem;border-radius:var(--r-xs);
+  white-space:nowrap;letter-spacing:.02em;
 }
-.result-info { min-width: 0; }
+.result-info { min-width:0; }
 .result-name {
-  font-weight: 600; font-size: .9375rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-weight:700;font-size:.9375rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .result-title {
-  font-size: .8125rem; color: var(--text-2); margin-top: .125rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size:.8rem;color:var(--text-2);margin-top:.1rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 
 /* ── Badge ─────────────────────────────────────────────────── */
 .badge {
-  display: inline-flex; align-items: center; gap: .3rem;
-  font-size: .7rem; font-weight: 700; letter-spacing: .04em;
-  text-transform: uppercase; padding: .22rem .6rem;
-  border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.6875rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:.25rem .625rem;
+  border-radius:99px;white-space:nowrap;flex-shrink:0;
 }
-.badge-ok   { background: var(--ok-bg);    color: var(--ok-text); }
-.badge-open { background: var(--accent-dim); color: var(--accent); }
-.badge-dot  { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.badge-ok   { background:var(--ok-bg);   color:var(--ok-text); }
+.badge-open { background:var(--accent-dim); color:var(--accent); }
+.badge-dot  { width:5px;height:5px;border-radius:50%;background:currentColor; }
 
-/* ── Detail card ───────────────────────────────────────────── */
-.detail-hd {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+/* ── Detail / Confirm card ─────────────────────────────────── */
+.card-hd {
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:1rem;margin-bottom:1.375rem;padding-bottom:1.125rem;
+  border-bottom:1px solid var(--border);
 }
-.detail-hd-title { font-size: 1rem; font-weight: 700; line-height: 1.3; }
-.detail-hd-sub   { font-size: .8125rem; color: var(--text-2); margin-top: .2rem; }
+.card-hd-title { font-size:1.0625rem;font-weight:800;line-height:1.25; }
+.card-hd-sub   { font-size:.8125rem;color:var(--text-2);margin-top:.2rem; }
 .btn-icon {
-  background: none; border: none; color: var(--text-3);
-  padding: .25rem; font-size: 1.125rem; flex-shrink: 0; cursor: pointer;
-  transition: color .15s;
+  background:none;border:none;color:var(--text-3);
+  padding:.25rem;font-size:1.125rem;flex-shrink:0;cursor:pointer;
+  line-height:1;border-radius:var(--r-xs);
+  transition:color .15s,background .15s;
 }
-.btn-icon:hover { color: var(--text-1); }
+.btn-icon:hover { color:var(--text-1);background:var(--surface-2); }
 
-.fields { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
-.field  { display: grid; grid-template-columns: 130px 1fr; gap: .5rem; }
+.fields { display:grid;gap:.75rem;margin-bottom:1.625rem; }
+.field  { display:grid;grid-template-columns:120px 1fr;gap:.625rem;align-items:start; }
 .field-key {
-  font-size: .8rem; font-weight: 600; letter-spacing: .02em;
-  color: var(--text-3); padding-top: .15rem;
+  font-size:.775rem;font-weight:700;letter-spacing:.03em;
+  color:var(--text-3);padding-top:.2rem;
 }
-.field-val      { font-size: .9375rem; color: var(--text-1); word-break: break-word; }
+.field-val      { font-size:.9375rem;color:var(--text-1);word-break:break-word;line-height:1.5; }
 .field-val-mono {
-  font-family: 'SF Mono','Cascadia Code','Consolas',monospace;
-  font-size: .875rem; font-variant-numeric: tabular-nums;
+  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-size:.875rem;font-variant-numeric:tabular-nums;
+  color:var(--accent);
 }
 
 /* ── Notice ────────────────────────────────────────────────── */
 .notice {
-  display: flex; gap: .625rem; align-items: flex-start;
-  padding: .875rem 1rem; border-radius: var(--r-sm);
-  font-size: .875rem; margin-bottom: 1.25rem;
+  display:flex;gap:.625rem;align-items:flex-start;
+  padding:.875rem 1rem;border-radius:var(--r-sm);
+  font-size:.875rem;margin-bottom:1.375rem;line-height:1.5;
 }
-.notice-warn { background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn); }
-.notice-info { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+.notice-icon { flex-shrink:0; }
+.notice-warn { background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn); }
+.notice-info { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent); }
 
-/* ── Actions ───────────────────────────────────────────────── */
-.actions { display: flex; gap: .625rem; }
-.actions .btn { flex: 1; }
-
-/* ── Success ───────────────────────────────────────────────── */
-.success-wrap { text-align: center; padding: 2rem 1rem; }
-.success-ring {
-  width: 60px; height: 60px; border-radius: 50%;
-  background: var(--ok-bg); color: var(--ok);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.25rem; font-size: 1.75rem;
-}
-.success-title { font-size: 1.25rem; font-weight: 800; color: var(--ok); margin-bottom: .375rem; }
-.success-body  { font-size: .9rem; color: var(--text-2); margin-bottom: .25rem; }
-.success-ts {
-  font-family: 'SF Mono','Cascadia Code','Consolas',monospace;
-  font-size: .8125rem; color: var(--text-3); margin-bottom: 1.75rem;
-}
+/* ── Actions row ───────────────────────────────────────────── */
+.actions { display:flex;gap:.625rem; }
+.actions .btn { flex:1; }
 
 /* ── Camera ────────────────────────────────────────────────── */
 .camera-viewport {
-  position: relative;
-  background: #000;
-  border-radius: var(--r-sm);
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  margin-bottom: 1rem;
+  position:relative;
+  background:#000;
+  border-radius:var(--r-sm);
+  overflow:hidden;
+  aspect-ratio:4/3;
+  margin-bottom:1.125rem;
 }
 .camera-viewport video,
 .camera-viewport img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
+  width:100%;height:100%;object-fit:cover;display:block;
 }
-.camera-overlay {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
+
+/* Corner-bracket viewfinder overlay */
+.cam-finder {
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
 }
-.camera-guide {
-  width: 70%; aspect-ratio: 3/4;
-  border: 2px solid rgba(255,255,255,.5);
-  border-radius: 8px;
-  box-shadow: 0 0 0 9999px rgba(0,0,0,.3);
+.cam-finder-inner {
+  width:62%;aspect-ratio:3/4;position:relative;
 }
-.camera-spinner {
-  width: 32px; height: 32px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
+.cam-finder-inner::before,
+.cam-finder-inner::after,
+.cam-corner-br,
+.cam-corner-bl {
+  content:'';
+  position:absolute;
+  width:20px;height:20px;
+}
+.cam-finder-inner::before { top:0;left:0;border-top:2px solid rgba(255,255,255,.7);border-left:2px solid rgba(255,255,255,.7);border-radius:2px 0 0 0; }
+.cam-finder-inner::after  { top:0;right:0;border-top:2px solid rgba(255,255,255,.7);border-right:2px solid rgba(255,255,255,.7);border-radius:0 2px 0 0; }
+.cam-corner-br { bottom:0;right:0;border-bottom:2px solid rgba(255,255,255,.7);border-right:2px solid rgba(255,255,255,.7);border-radius:0 0 2px 0; }
+.cam-corner-bl { bottom:0;left:0;border-bottom:2px solid rgba(255,255,255,.7);border-left:2px solid rgba(255,255,255,.7);border-radius:0 0 0 2px; }
+
+/* Dim overlay around finder */
+.cam-dim {
+  position:absolute;inset:0;
+  box-shadow:inset 0 0 0 9999px rgba(0,0,0,.35);
+  pointer-events:none;
+}
+.cam-spinner {
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.cam-spin-ring {
+  width:36px;height:36px;
+  border:3px solid rgba(255,255,255,.2);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Shutter flash */
+.cam-flash {
+  position:absolute;inset:0;
+  background:#fff;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .08s;
+}
+.cam-flash.on { opacity:.85; }
+
+/* Camera controls */
+.cam-controls {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:.75rem;
+}
+.cam-controls .btn-ghost { flex:1; }
+.shutter-btn {
+  width:64px;height:64px;flex-shrink:0;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid rgba(255,255,255,.35);
+  box-shadow:0 0 0 6px rgba(255,255,255,.12), 0 4px 16px rgba(0,0,0,.3);
+  cursor:pointer;
+  transition:transform .12s,box-shadow .12s;
+  display:flex;align-items:center;justify-content:center;
+}
+.shutter-btn:hover {
+  transform:scale(1.06);
+  box-shadow:0 0 0 8px rgba(255,255,255,.18),0 4px 20px rgba(0,0,0,.35);
+}
+.shutter-btn:active { transform:scale(.94); }
+.shutter-inner {
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(0,0,0,.06);border:1.5px solid rgba(0,0,0,.08);
+}
+
+/* ── Success ───────────────────────────────────────────────── */
+.success-wrap { text-align:center;padding:2.25rem 1rem; }
+.success-ring-wrap {
+  position:relative;
+  width:80px;height:80px;
+  margin:0 auto 1.375rem;
+}
+.success-ring-wrap svg {
+  width:80px;height:80px;
+  transform:rotate(-90deg);
+}
+.success-ring-track { fill:none;stroke:var(--ok-bg);stroke-width:5; }
+.success-ring-fill {
+  fill:none;stroke:var(--ok);stroke-width:5;
+  stroke-dasharray:220;stroke-dashoffset:220;
+  stroke-linecap:round;
+  transition:stroke-dashoffset .7s cubic-bezier(.22,1,.36,1);
+}
+.success-ring-fill.draw { stroke-dashoffset:0; }
+.success-check {
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;color:var(--ok);
+  opacity:0;transform:scale(.6);
+  transition:opacity .25s .4s ease,transform .25s .4s cubic-bezier(.22,1,.36,1);
+}
+.success-check.show { opacity:1;transform:scale(1); }
+.success-title { font-size:1.375rem;font-weight:900;color:var(--ok);margin-bottom:.4rem;letter-spacing:-.02em; }
+.success-name  { font-size:.9375rem;font-weight:600;color:var(--text-1);margin-bottom:.2rem; }
+.success-pname { font-size:.8125rem;color:var(--text-2);margin-bottom:.375rem; }
+.success-ts {
+  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-size:.775rem;color:var(--text-3);margin-bottom:1.875rem;
 }
 
 /* ── Utility ───────────────────────────────────────────────── */
-.hidden { display: none !important; }
-.mt-sm  { margin-top: .5rem; }
+.hidden { display:none !important; }
+.mt     { margin-top:1rem; }
+.mt-sm  { margin-top:.5rem; }
 
-@media (max-width: 480px) {
-  .field  { grid-template-columns: 1fr; gap: .125rem; }
-  .field-key { padding-top: 0; }
-  .search-row { flex-direction: column; }
-  .actions    { flex-direction: column; }
-  .result-item { grid-template-columns: 1fr auto; }
-  .result-pid  { display: none; }
+@media (max-width:480px) {
+  .field { grid-template-columns:1fr;gap:.1rem; }
+  .field-key { padding-top:0; }
+  .actions { flex-direction:column; }
+  .result-item { grid-template-columns:1fr auto; }
+  .result-pid  { display:none; }
+  .cam-controls { justify-content:center;flex-wrap:wrap; }
+  .cam-controls .btn-ghost { flex:none;min-width:90px; }
 }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- Header -->
-  <header class="hd">
-    <div class="hd-eyebrow">Conference System</div>
+<!-- ── Site Header ───────────────────────────────────────── -->
+<header class="site-header">
+  <div class="hd-inner">
+    <div class="hd-conf">ADAS Conference</div>
     <h1 class="hd-title">Paper Registration</h1>
-    <p class="hd-sub">ค้นหาผลงานด้วย ชื่อผู้แต่ง, ชื่อบทความ หรือ Paper ID แล้วยืนยันลงทะเบียน</p>
-  </header>
+    <p class="hd-sub">ลงทะเบียนบทความเพื่อยืนยันการเข้าร่วมงาน</p>
 
-  <!-- Search card -->
-  <div class="card">
-    <div class="section-label">ค้นหาบทความ</div>
-    <div class="search-row">
-      <input
-        id="searchInput"
-        class="search-input"
-        type="text"
-        placeholder="ชื่อผู้แต่ง, ชื่อบทความ หรือ Paper ID…"
-        autocomplete="off"
-        spellcheck="false"
-      >
+    <nav class="steps" id="stepTrack" aria-label="ขั้นตอน">
+      <div class="step-item active" id="s1">
+        <div class="step-circle">1</div>
+        <div class="step-text">ค้นหา</div>
+      </div>
+      <div class="step-connector" id="sc1"></div>
+      <div class="step-item" id="s2">
+        <div class="step-circle">2</div>
+        <div class="step-text">ตรวจสอบ</div>
+      </div>
+      <div class="step-connector" id="sc2"></div>
+      <div class="step-item" id="s3">
+        <div class="step-circle">3</div>
+        <div class="step-text">ถ่ายรูป</div>
+      </div>
+      <div class="step-connector" id="sc3"></div>
+      <div class="step-item" id="s4">
+        <div class="step-circle">4</div>
+        <div class="step-text">สำเร็จ</div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ── Main content ──────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Search -->
+  <div class="card" id="searchCard">
+    <div class="search-label">ค้นหาบทความ</div>
+    <div class="search-wrap">
+      <div class="search-field">
+        <span class="search-icon-el">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="6.5" cy="6.5" r="4.75" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input
+          id="searchInput"
+          class="search-input"
+          type="text"
+          placeholder="ชื่อผู้แต่ง, ชื่อบทความ หรือ Paper ID…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
       <button id="searchBtn" class="btn btn-primary" onclick="handleSearch()">ค้นหา</button>
     </div>
-    <div id="loadHint" class="mt-sm hidden" style="font-size:.8rem;color:var(--text-3)">
-      กำลังโหลดข้อมูล…
-    </div>
+    <div id="loadHint" class="mt-sm hidden" style="font-size:.8rem;color:var(--text-3)">กำลังโหลดข้อมูล…</div>
   </div>
 
-  <!-- Results card -->
+  <!-- Results -->
   <div id="resultsCard" class="card hidden">
     <div class="results-hd">
       <div class="section-label">ผลการค้นหา</div>
@@ -336,23 +627,33 @@ input  { font-family: inherit; }
     <div id="resultList" class="result-list"></div>
   </div>
 
-  <!-- Detail card -->
+  <!-- Detail / Confirm -->
   <div id="detailCard" class="card hidden">
-    <div class="detail-hd">
+    <div class="card-hd">
       <div>
-        <div class="detail-hd-title">ยืนยันข้อมูลก่อนลงทะเบียน</div>
-        <div class="detail-hd-sub">ตรวจสอบให้ถูกต้องก่อนกด "ยืนยันลงทะเบียน"</div>
+        <div class="card-hd-title">ตรวจสอบข้อมูล</div>
+        <div class="card-hd-sub">ยืนยันความถูกต้องก่อนดำเนินการต่อ</div>
       </div>
-      <button class="btn-icon" onclick="closeDetail()" title="ปิด">✕</button>
+      <button class="btn-icon" onclick="closeDetail()" title="ปิด" aria-label="ปิด">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
 
     <div id="noticeRegistered" class="notice notice-warn hidden">
-      <span style="flex-shrink:0">⚠️</span>
+      <svg class="notice-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+      </svg>
       <span>บทความนี้ <strong>ลงทะเบียนแล้ว</strong> — ไม่สามารถลงทะเบียนซ้ำได้</span>
     </div>
     <div id="noticeReady" class="notice notice-info hidden">
-      <span style="flex-shrink:0">ℹ️</span>
-      <span>บทความนี้ยังไม่ได้ลงทะเบียน — กดปุ่มด้านล่างเพื่อยืนยัน</span>
+      <svg class="notice-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M5 8.5l2.5 2.5L11.5 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>พร้อมลงทะเบียน — กด "ถัดไป" เพื่อถ่ายรูปยืนยัน</span>
     </div>
 
     <div class="fields">
@@ -379,74 +680,116 @@ input  { font-family: inherit; }
     </div>
 
     <div class="actions">
-      <button class="btn btn-ghost" onclick="closeDetail()">ยกเลิก</button>
-      <button id="confirmBtn" class="btn btn-ok" onclick="openCamera()">
-        📷 ถัดไป: ถ่ายรูป
+      <button class="btn btn-ghost" onclick="closeDetail()">ย้อนกลับ</button>
+      <button id="confirmBtn" class="btn btn-primary" onclick="openCamera()">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          <circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+        ถ่ายรูป &amp; ลงทะเบียน
       </button>
     </div>
   </div>
 
-  <!-- Camera card -->
+  <!-- Camera -->
   <div id="cameraCard" class="card hidden">
-    <div class="detail-hd">
+    <div class="card-hd">
       <div>
-        <div class="detail-hd-title">ถ่ายรูปเป็นหลักฐาน</div>
-        <div class="detail-hd-sub" id="cameraSubtitle">จัดตำแหน่งให้อยู่ในกรอบ แล้วกดถ่ายรูป</div>
+        <div class="card-hd-title">ถ่ายรูปยืนยัน</div>
+        <div class="card-hd-sub" id="camSubtitle">จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม</div>
       </div>
-      <button class="btn-icon" onclick="cancelCamera()" title="ย้อนกลับ">✕</button>
+      <button class="btn-icon" onclick="cancelCamera()" aria-label="ย้อนกลับ">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
 
-    <!-- Viewport -->
     <div class="camera-viewport">
       <video id="camVideo" autoplay playsinline muted></video>
       <img  id="camPreview" class="hidden">
-      <div  id="camOverlay" class="camera-overlay">
-        <div class="camera-guide"></div>
+      <div  id="camFinder" class="cam-dim">
+        <div class="cam-finder">
+          <div class="cam-finder-inner">
+            <span class="cam-corner-br"></span>
+            <span class="cam-corner-bl"></span>
+          </div>
+        </div>
       </div>
-      <div  id="camSpinner" class="camera-overlay hidden">
-        <div class="camera-spinner"></div>
+      <div id="camSpinner" class="cam-spinner hidden">
+        <div class="cam-spin-ring"></div>
       </div>
+      <div id="camFlash" class="cam-flash"></div>
     </div>
 
-    <!-- Shoot controls -->
-    <div id="shootControls" class="actions">
+    <!-- Shoot mode -->
+    <div id="shootControls" class="cam-controls">
       <button class="btn btn-ghost" onclick="cancelCamera()">ย้อนกลับ</button>
-      <button class="btn btn-primary" style="flex:2" onclick="capturePhoto()">📷 ถ่ายรูป</button>
+      <button class="shutter-btn" onclick="capturePhoto()" aria-label="ถ่ายรูป">
+        <div class="shutter-inner"></div>
+      </button>
+      <div style="flex:1;max-width:90px"></div>
     </div>
 
-    <!-- Retake / confirm controls -->
-    <div id="retakeControls" class="actions hidden">
-      <button class="btn btn-ghost" onclick="retakePhoto()">ถ่ายใหม่</button>
+    <!-- Retake mode -->
+    <div id="retakeControls" class="cam-controls hidden">
+      <button class="btn btn-ghost" style="flex:1" onclick="retakePhoto()">ถ่ายใหม่</button>
       <button id="submitBtn" class="btn btn-ok" style="flex:2" onclick="submitRegistration()">
-        ✓ ยืนยัน &amp; ลงทะเบียน
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        ยืนยัน &amp; ลงทะเบียน
       </button>
     </div>
   </div>
 
-  <!-- Success card -->
+  <!-- Success -->
   <div id="successCard" class="card hidden">
     <div class="success-wrap">
-      <div class="success-ring">✓</div>
+      <div class="success-ring-wrap">
+        <svg viewBox="0 0 80 80">
+          <circle class="success-ring-track" cx="40" cy="40" r="35"/>
+          <circle class="success-ring-fill" id="successRing" cx="40" cy="40" r="35"/>
+        </svg>
+        <div class="success-check" id="successCheck">✓</div>
+      </div>
       <div class="success-title">ลงทะเบียนสำเร็จ</div>
-      <p class="success-body" id="successName"></p>
-      <p class="success-body" id="successTitle" style="color:var(--text-3);font-size:.85rem"></p>
-      <p class="success-ts"   id="successTs"></p>
-      <button class="btn btn-primary" onclick="resetAll()" style="min-width:140px">
+      <p class="success-name"  id="successName"></p>
+      <p class="success-pname" id="successTitle"></p>
+      <p class="success-ts"    id="successTs"></p>
+      <button class="btn btn-primary" onclick="resetAll()" style="min-width:160px;margin:0 auto">
         ลงทะเบียนเพิ่มเติม
       </button>
     </div>
   </div>
 
-</div>
+</main>
 
 <script>
-let allRows        = null;
-let selectedRow    = null;
-let camStream      = null;
-let capturedB64    = null;
+// ── State ──────────────────────────────────────────────────────
+let allRows     = null;
+let selectedRow = null;
+let camStream   = null;
+let capturedB64 = null;
+
+// ── Step tracker ───────────────────────────────────────────────
+const STEPS = ['s1','s2','s3','s4'];
+const CONNS  = ['sc1','sc2','sc3'];
+function setStep(n) { // 1-4
+  STEPS.forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i+1 === n) el.classList.add('active');
+    if (i+1 <  n) el.classList.add('done');
+  });
+  CONNS.forEach((id,i) => {
+    document.getElementById(id).classList.toggle('done', i+1 < n);
+  });
+}
 
 // ── Bootstrap ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  setStep(1);
   preloadData();
   document.getElementById('searchInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') handleSearch();
@@ -473,6 +816,7 @@ async function handleSearch() {
   if (!q) { showMsg('กรุณาพิมพ์คำค้นหา'); return; }
 
   hideCards();
+  setStep(1);
   const btn = document.getElementById('searchBtn');
   btn.disabled = true; btn.textContent = 'กำลังค้นหา…';
 
@@ -498,9 +842,13 @@ async function handleSearch() {
 
 function norm(s) { return String(s ?? '').toLowerCase(); }
 
-// ── Render results ─────────────────────────────────────────────
+// ── Results ─────────────────────────────────────────────────────
 function renderResults(hits, query) {
-  show('resultsCard');
+  const card = document.getElementById('resultsCard');
+  card.classList.remove('hidden');
+  card.classList.add('card-enter');
+  setTimeout(() => card.classList.remove('card-enter'), 300);
+
   const list = document.getElementById('resultList');
   list.innerHTML = '';
   document.getElementById('resultsCount').textContent = hits.length ? `พบ ${hits.length} รายการ` : '';
@@ -516,9 +864,9 @@ function renderResults(hits, query) {
 
   hits.forEach(row => {
     const isReg = row['Status'] === 'Registed';
-    const el = document.createElement('div');
+    const el    = document.createElement('div');
     el.className = 'result-item';
-    el.setAttribute('tabindex', '0');
+    el.tabIndex  = 0;
     el.setAttribute('role', 'button');
     el.innerHTML = `
       <span class="result-pid">${esc(row['Paper-ID'])}</span>
@@ -531,13 +879,16 @@ function renderResults(hits, query) {
         ${isReg ? 'ลงทะเบียนแล้ว' : 'ยังไม่ได้ลงทะเบียน'}
       </span>`;
     el.addEventListener('click',   () => openDetail(row));
-    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openDetail(row); });
+    el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') openDetail(row); });
     list.appendChild(el);
   });
 }
 
 function showMsg(msg, isErr) {
-  show('resultsCard');
+  const card = document.getElementById('resultsCard');
+  card.classList.remove('hidden');
+  card.classList.add('card-enter');
+  setTimeout(() => card.classList.remove('card-enter'), 300);
   document.getElementById('resultsCount').textContent = '';
   document.getElementById('resultList').innerHTML = `<div class="state">
     ${isErr ? '<div class="state-icon">⚠️</div>' : ''}
@@ -554,11 +905,8 @@ function openDetail(row) {
   setText('dName',    row['Name']);
   setText('dTitle',   row['Peper-Title']);
 
-  document.getElementById('dStatus').innerHTML = `
-    <span class="badge ${isReg ? 'badge-ok' : 'badge-open'}">
-      <span class="badge-dot"></span>
-      ${isReg ? 'ลงทะเบียนแล้ว' : 'ยังไม่ได้ลงทะเบียน'}
-    </span>`;
+  document.getElementById('dStatus').innerHTML = `<span class="badge ${isReg ? 'badge-ok':'badge-open'}">
+    <span class="badge-dot"></span>${isReg ? 'ลงทะเบียนแล้ว' : 'ยังไม่ได้ลงทะเบียน'}</span>`;
 
   const lastRow = document.getElementById('dLastRow');
   if (row['Last_status_cheanged']) {
@@ -572,16 +920,23 @@ function openDetail(row) {
   document.getElementById('noticeReady').classList.toggle('hidden', isReg);
 
   const confirmBtn = document.getElementById('confirmBtn');
-  confirmBtn.disabled    = isReg;
-  confirmBtn.textContent = '✓ ยืนยันลงทะเบียน';
+  confirmBtn.disabled = isReg;
+  confirmBtn.innerHTML = isReg
+    ? 'ลงทะเบียนแล้ว'
+    : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/></svg> ถ่ายรูป &amp; ลงทะเบียน`;
 
-  show('detailCard');
-  document.getElementById('detailCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const card = document.getElementById('detailCard');
+  card.classList.remove('hidden');
+  card.classList.add('card-enter');
+  setTimeout(() => card.classList.remove('card-enter'), 300);
+  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  setStep(2);
 }
 
 function closeDetail() {
   hide('detailCard');
   selectedRow = null;
+  setStep(1);
 }
 
 // ── Camera ─────────────────────────────────────────────────────
@@ -590,82 +945,81 @@ async function openCamera() {
   hide('detailCard');
   capturedB64 = null;
 
-  // Reset camera UI to shoot mode
+  // Reset camera UI
   show('camVideo'); hide('camPreview');
-  show('camOverlay'); hide('camSpinner');
+  show('camFinder'); hide('camSpinner');
   show('shootControls'); hide('retakeControls');
-  document.getElementById('cameraSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดถ่ายรูป';
-  show('cameraCard');
-  document.getElementById('cameraCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('camSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม';
 
-  show('camSpinner'); hide('camOverlay');
+  const card = document.getElementById('cameraCard');
+  card.classList.remove('hidden');
+  card.classList.add('card-enter');
+  setTimeout(() => card.classList.remove('card-enter'), 300);
+  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  setStep(3);
+
+  show('camSpinner'); hide('camFinder');
   try {
     camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } },
+      video: { facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:960 } },
     });
     document.getElementById('camVideo').srcObject = camStream;
-    hide('camSpinner'); show('camOverlay');
+    hide('camSpinner'); show('camFinder');
   } catch (err) {
     hide('camSpinner');
-    alert('ไม่สามารถเข้าถึงกล้องได้:\n' + err.message + '\n\nตรวจสอบว่า browser ได้รับสิทธิ์กล้องแล้ว');
+    alert('ไม่สามารถเข้าถึงกล้องได้:\n' + err.message);
     cancelCamera();
   }
 }
 
 function capturePhoto() {
-  const video = document.getElementById('camVideo');
+  const video  = document.getElementById('camVideo');
   const canvas = document.createElement('canvas');
-
-  // Resize ให้ไม่เกิน 1280px
-  const MAX = 1280;
-  const ratio = Math.min(1, MAX / video.videoWidth);
+  const MAX    = 1280;
+  const ratio  = Math.min(1, MAX / video.videoWidth);
   canvas.width  = Math.round(video.videoWidth  * ratio);
   canvas.height = Math.round(video.videoHeight * ratio);
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-  capturedB64   = dataUrl.split(',')[1];
+  // Shutter flash effect
+  const flash = document.getElementById('camFlash');
+  flash.classList.add('on');
+  setTimeout(() => flash.classList.remove('on'), 180);
 
-  // แสดง preview
+  const dataUrl  = canvas.toDataURL('image/jpeg', 0.85);
+  capturedB64    = dataUrl.split(',')[1];
+
   document.getElementById('camPreview').src = dataUrl;
-  show('camPreview'); hide('camVideo'); hide('camOverlay');
+  show('camPreview'); hide('camVideo'); hide('camFinder');
   hide('shootControls'); show('retakeControls');
-  document.getElementById('cameraSubtitle').textContent = 'ตรวจสอบรูป ถ้าไม่พอใจกดถ่ายใหม่';
-
+  document.getElementById('camSubtitle').textContent = 'ตรวจสอบรูป — กด "ถ่ายใหม่" หรือ "ยืนยัน"';
   stopStream();
 }
 
 function retakePhoto() {
   capturedB64 = null;
-  hide('camPreview'); show('camVideo'); show('camOverlay');
+  hide('camPreview'); show('camVideo'); show('camFinder');
   hide('retakeControls'); show('shootControls');
-  document.getElementById('cameraSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดถ่ายรูป';
+  document.getElementById('camSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม';
 
-  show('camSpinner'); hide('camOverlay');
-  navigator.mediaDevices.getUserMedia({
-    video: { facingMode: { ideal: 'environment' } },
-  }).then(s => {
-    camStream = s;
-    document.getElementById('camVideo').srcObject = s;
-    hide('camSpinner'); show('camOverlay');
-  }).catch(err => {
-    hide('camSpinner');
-    alert('ไม่สามารถเปิดกล้องได้: ' + err.message);
-  });
+  show('camSpinner'); hide('camFinder');
+  navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } } })
+    .then(s => { camStream = s; document.getElementById('camVideo').srcObject = s; hide('camSpinner'); show('camFinder'); })
+    .catch(err => { hide('camSpinner'); alert('ไม่สามารถเปิดกล้อง: ' + err.message); });
 }
 
 function cancelCamera() {
   stopStream();
   capturedB64 = null;
   hide('cameraCard');
-  if (selectedRow) { show('detailCard'); }
+  if (selectedRow) { show('detailCard'); setStep(2); }
 }
 
 function stopStream() {
   if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
 }
 
-// ── Register (submit with photo) ────────────────────────────────
+// ── Register ───────────────────────────────────────────────────
 async function submitRegistration() {
   if (!capturedB64 || !selectedRow) return;
 
@@ -674,12 +1028,9 @@ async function submitRegistration() {
 
   try {
     const res  = await fetch('/api/register', {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        paperId:      selectedRow['Paper-ID'],
-        imageBase64:  capturedB64,
-      }),
+      body: JSON.stringify({ paperId: selectedRow['Paper-ID'], imageBase64: capturedB64 }),
     });
     const data = await res.json();
 
@@ -695,37 +1046,59 @@ async function submitRegistration() {
       showSuccess(data);
     } else if (data.alreadyRegistered) {
       hide('cameraCard');
-      openDetail(selectedRow); // re-open detail with "already registered" notice
+      openDetail(selectedRow);
     } else {
       alert('เกิดข้อผิดพลาด: ' + (data.message || 'Unknown error'));
-      btn.disabled = false; btn.textContent = '✓ ยืนยัน & ลงทะเบียน';
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยัน &amp; ลงทะเบียน`;
     }
   } catch (err) {
     alert('ไม่สามารถเชื่อมต่อ server ได้:\n' + err.message);
-    btn.disabled = false; btn.textContent = '✓ ยืนยัน & ลงทะเบียน';
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยัน &amp; ลงทะเบียน`;
   }
 }
 
 // ── Success ────────────────────────────────────────────────────
 function showSuccess(data) {
   hideCards();
-  show('successCard');
-  setText('successName',  data.name  || selectedRow?.['Name']         || '');
-  setText('successTitle', data.title || selectedRow?.['Peper-Title']  || '');
-  setText('successTs',    `ลงทะเบียนเมื่อ ${data.timestamp}`);
+  setStep(4);
+  const card = document.getElementById('successCard');
+  card.classList.remove('hidden');
+  card.classList.add('card-enter');
+  setTimeout(() => card.classList.remove('card-enter'), 300);
+
+  setText('successName',  data.name  || selectedRow?.['Name'] || '');
+  setText('successTitle', data.title || selectedRow?.['Peper-Title'] || '');
+  setText('successTs', `ลงทะเบียนเมื่อ ${data.timestamp}`);
+
+  // Animate ring + checkmark
+  setTimeout(() => {
+    document.getElementById('successRing').classList.add('draw');
+    document.getElementById('successCheck').classList.add('show');
+  }, 80);
 }
 
 function resetAll() {
   document.getElementById('searchInput').value = '';
   selectedRow = null;
   hideCards();
+  setStep(1);
+  // Reset ring animation for next use
+  const ring  = document.getElementById('successRing');
+  const check = document.getElementById('successCheck');
+  ring.classList.remove('draw');
+  check.classList.remove('show');
 }
 
 // ── Helpers ────────────────────────────────────────────────────
-function hideCards() { stopStream(); ['resultsCard','detailCard','cameraCard','successCard'].forEach(hide); }
-function show(id)    { document.getElementById(id).classList.remove('hidden'); }
-function hide(id)    { document.getElementById(id).classList.add('hidden'); }
-function setText(id, val) { document.getElementById(id).textContent = val ?? '—'; }
+function hideCards() {
+  stopStream();
+  ['resultsCard','detailCard','cameraCard','successCard'].forEach(hide);
+}
+function show(id)       { document.getElementById(id).classList.remove('hidden'); }
+function hide(id)       { document.getElementById(id).classList.add('hidden'); }
+function setText(id, v) { document.getElementById(id).textContent = v ?? '—'; }
 function esc(s) {
   return String(s ?? '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

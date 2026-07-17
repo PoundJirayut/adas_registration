@@ -11,7 +11,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const SHEET_ID   = process.env.SHEET_ID  || '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
 const SCRIPT_URL = process.env.SCRIPT_URL || '';
 const PORT       = process.env.PORT       || 3000;
-const BASE_URL   = process.env.BASE_URL   || `http://localhost:${PORT}`;
+const BASE_URL   = process.env.BASE_URL
+  || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : `http://localhost:${PORT}`);
 
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
