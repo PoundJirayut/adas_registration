@@ -21,19 +21,14 @@ const DRIVE_FOLDER = 'APSIPA_Registration_Photos';
 function doGet(e) {
   const action = e.parameter.action;
 
-  // action=register : update Status + Last_status_cheanged
   if (action === 'register') {
-    const result = registerPaper(e.parameter.paperId);
+    const result = registerPaper(
+      e.parameter.paperId,
+      e.parameter.imageUrl || ''
+    );
     return respond(result);
   }
 
-  // action=setPicture : write Drive URL into Picture column (called after upload)
-  if (action === 'setPicture') {
-    const result = setPictureUrl(e.parameter.paperId, e.parameter.driveUrl || '');
-    return respond(result);
-  }
-
-  // action=info : show Drive folder URL for easy navigation
   if (action === 'info') {
     const folders = DriveApp.getFoldersByName(DRIVE_FOLDER);
     const folder  = folders.hasNext() ? folders.next() : null;
@@ -50,24 +45,8 @@ function doGet(e) {
   return respond({ status: 'ok', message: 'APSIPA Registration API' });
 }
 
-// ── doPost — รับ base64 image แล้วอัพโหลดขึ้น Drive ────────────
-function doPost(e) {
-  try {
-    const payload = JSON.parse(e.postData.contents);
-
-    if (payload.action === 'uploadImage') {
-      const result = uploadBase64ToDrive(payload.paperId, payload.imageBase64 || '');
-      return respond(result);
-    }
-
-    return respond({ success: false, message: 'Unknown action' });
-  } catch (err) {
-    return respond({ success: false, message: 'doPost error: ' + err.message });
-  }
-}
-
 // ── registerPaper ──────────────────────────────────────────────
-function registerPaper(paperId) {
+function registerPaper(paperId, imageUrl) {
   if (!paperId) return { success: false, message: 'paperId is required' };
 
   try {
@@ -86,12 +65,27 @@ function registerPaper(paperId) {
       sheet.getRange(i + 1, col.status + 1).setValue('Registed');
       sheet.getRange(i + 1, col.lastChanged + 1).setValue(timestamp);
 
+      // Upload photo to Google Drive (only if imageUrl is provided and publicly accessible)
+      let driveUrl   = '';
+      let driveError = '';
+      if (imageUrl && col.picture !== -1) {
+        const result = uploadToDrive(paperId, imageUrl);
+        if (result.url) {
+          driveUrl = result.url;
+          sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
+        } else {
+          driveError = result.error;
+        }
+      }
+
       return {
-        success:   true,
+        success:    true,
         timestamp,
-        name:      data[i][col.name],
-        title:     data[i][col.title],
-        paperId:   rowId,
+        name:       data[i][col.name],
+        title:      data[i][col.title],
+        paperId:    rowId,
+        driveUrl,
+        driveError: driveError || undefined,
       };
     }
 
@@ -101,50 +95,38 @@ function registerPaper(paperId) {
   }
 }
 
-// ── setPictureUrl ──────────────────────────────────────────────
-function setPictureUrl(paperId, driveUrl) {
-  if (!paperId || !driveUrl) return { success: false, message: 'paperId and driveUrl required' };
-
+// ── uploadToDrive ──────────────────────────────────────────────
+// Fetches the photo from a public URL and saves it to Google Drive.
+// Requires the server to be publicly accessible (Railway, not localhost).
+function uploadToDrive(paperId, sourceUrl) {
   try {
-    const { sheet, data, headers } = getSheet();
-    const col = getColumns(headers);
+    const response = UrlFetchApp.fetch(sourceUrl, {
+      muteHttpExceptions: true,
+      followRedirects:    true,
+    });
 
-    if (col.picture === -1) return { success: false, message: 'No "Picture" column in sheet' };
-
-    for (let i = 1; i < data.length; i++) {
-      if (String(data[i][col.paperId]).trim() !== String(paperId).trim()) continue;
-      sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
-      return { success: true };
+    const code = response.getResponseCode();
+    if (code !== 200) {
+      return { error: 'Fetch returned HTTP ' + code + ' — server must be publicly accessible' };
     }
 
-    return { success: false, message: 'Paper ID not found' };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-// ── uploadBase64ToDrive ────────────────────────────────────────
-function uploadBase64ToDrive(paperId, base64) {
-  if (!paperId || !base64) return { success: false, error: 'paperId and imageBase64 required' };
-
-  try {
-    const decoded = Utilities.base64Decode(base64);
-    const blob    = Utilities.newBlob(decoded, 'image/jpeg', paperId + '_' + Date.now() + '.jpg');
-
-    const folders = DriveApp.getFoldersByName(DRIVE_FOLDER);
-    const folder  = folders.hasNext() ? folders.next() : DriveApp.createFolder(DRIVE_FOLDER);
-
-    const file = folder.createFile(blob);
+    const blob   = response.getBlob().setName(paperId + '_' + Date.now() + '.jpg');
+    const folder = getOrCreateFolder();
+    const file   = folder.createFile(blob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
-    const driveUrl = 'https://drive.google.com/file/d/' + file.getId() + '/view';
-    return { success: true, driveUrl };
+    return { url: 'https://drive.google.com/file/d/' + file.getId() + '/view' };
   } catch (err) {
-    return { success: false, error: err.message };
+    return { error: err.message };
   }
 }
 
 // ── Helpers ────────────────────────────────────────────────────
+function getOrCreateFolder() {
+  const folders = DriveApp.getFoldersByName(DRIVE_FOLDER);
+  return folders.hasNext() ? folders.next() : DriveApp.createFolder(DRIVE_FOLDER);
+}
+
 function getSheet() {
   const ss    = SpreadsheetApp.openById(SHEET_ID);
   const sheet = ss.getSheets()[0];

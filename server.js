@@ -19,6 +19,8 @@ const BASE_URL   = process.env.BASE_URL
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
+const isLocalhost = BASE_URL.includes('localhost') || BASE_URL.includes('127.0.0.1');
+
 // ── GET /api/data ──────────────────────────────────────────────
 app.get('/api/data', async (req, res) => {
   try {
@@ -59,64 +61,34 @@ app.post('/api/register', async (req, res) => {
   }
 
   try {
-    // ── Step 1: Update Sheet via GET (always works, no redirect issue) ──
-    const params = new URLSearchParams({ action: 'register', paperId });
-    const regResp = await axios.get(`${SCRIPT_URL}?${params}`);
-    const regData = regResp.data;
-
-    if (!regData.success) {
-      return res.json(regData);
+    // Save image to local disk
+    let imageUrl = '';
+    if (imageBase64) {
+      const filename = `${paperId}_${Date.now()}.jpg`;
+      fs.writeFileSync(path.join(UPLOAD_DIR, filename), Buffer.from(imageBase64, 'base64'));
+      imageUrl = `${BASE_URL}/uploads/${filename}`;
     }
 
-    // ── Step 2: Upload image to Drive via doPost (separate call) ────────
-    let driveUrl   = '';
-    let driveError = '';
+    // Call Apps Script via GET — pass imageUrl only if server is publicly accessible
+    // (Apps Script cannot reach localhost, so Drive upload is skipped when running locally)
+    const params = new URLSearchParams({ action: 'register', paperId });
+    if (imageUrl && !isLocalhost) params.set('imageUrl', imageUrl);
 
-    if (imageBase64) {
-      const isLocalhost = BASE_URL.includes('localhost') || BASE_URL.includes('127.0.0.1');
+    const resp = await axios.get(`${SCRIPT_URL}?${params}`);
+    const data = resp.data;
 
-      if (isLocalhost) {
-        // Save locally — Apps Script can't reach localhost, skip Drive upload
-        const filename = `${paperId}_${Date.now()}.jpg`;
-        fs.writeFileSync(path.join(UPLOAD_DIR, filename), Buffer.from(imageBase64, 'base64'));
-        driveError = 'Running on localhost — Drive upload skipped (deploy to Railway to enable)';
-        console.warn('[/api/register] Drive upload skipped (localhost)');
+    if (data.success) {
+      if (data.driveUrl) {
+        console.log('[/api/register] Drive upload OK:', data.driveUrl);
+      } else if (isLocalhost) {
+        console.log('[/api/register] Local mode — Drive upload skipped. Photo saved to:', imageUrl);
+        data.driveSkipped = true;
       } else {
-        // On Railway: send base64 directly to Apps Script doPost
-        // Apps Script exec URL returns 302 on POST; we follow the redirect while keeping POST+body
-        try {
-          const payload = JSON.stringify({ action: 'uploadImage', paperId, imageBase64 });
-
-          let uploadResp = await axios.post(SCRIPT_URL, payload, {
-            headers: { 'Content-Type': 'application/json' },
-            maxRedirects: 0,
-            validateStatus: () => true,
-          });
-
-          if ((uploadResp.status === 301 || uploadResp.status === 302) && uploadResp.headers.location) {
-            uploadResp = await axios.post(uploadResp.headers.location, payload, {
-              headers: { 'Content-Type': 'application/json' },
-              validateStatus: () => true,
-            });
-          }
-
-          if (uploadResp.data?.driveUrl) {
-            driveUrl = uploadResp.data.driveUrl;
-            // Write Drive URL back to Sheet
-            await axios.get(`${SCRIPT_URL}?${new URLSearchParams({ action: 'setPicture', paperId, driveUrl })}`);
-            console.log('[/api/register] Drive upload OK:', driveUrl);
-          } else {
-            driveError = uploadResp.data?.error || 'Drive upload failed';
-            console.warn('[/api/register] Drive upload warning:', driveError);
-          }
-        } catch (uploadErr) {
-          driveError = uploadErr.message;
-          console.warn('[/api/register] Drive upload error:', driveError);
-        }
+        console.warn('[/api/register] Drive upload failed:', data.driveError || 'no error info');
       }
     }
 
-    res.json({ ...regData, driveUrl, driveError: driveError || undefined });
+    res.json(data);
   } catch (err) {
     console.error('[/api/register]', err.message);
     res.status(500).json({ success: false, message: err.message });
@@ -125,9 +97,14 @@ app.post('/api/register', async (req, res) => {
 
 // ── Start ──────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n  APSIPA Registration running at http://localhost:${PORT}`);
-  console.log(`  BASE_URL: ${BASE_URL}\n`);
+  console.log(`\n  APSIPA Registration  →  http://localhost:${PORT}`);
+  if (isLocalhost) {
+    console.log('  ⚠  Running locally — Drive upload will be skipped.');
+    console.log('     To enable Drive upload: deploy to Railway or use ngrok.\n');
+  } else {
+    console.log(`  Public URL: ${BASE_URL}\n`);
+  }
   if (!SCRIPT_URL) {
-    console.warn('  ⚠  SCRIPT_URL not configured — registration will not work\n');
+    console.warn('  ✗  SCRIPT_URL not configured — registration will not work\n');
   }
 });
