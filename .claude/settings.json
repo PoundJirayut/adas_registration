@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.google.com)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3001/api/data)",
+      "Bash(curl -s \"https://docs.google.com/spreadsheets/d/19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww/gviz/tq?tqx=out:json\")",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test01\"}')",
+      "Bash(python3 -m json.tool --no-ensure-ascii)",
+      "Bash(node /Users/jirayut/Documents/Inetms_pre_work/adas_registration/server.js)",
+      "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test02\",\"imageBase64\":\"__TRACKED_VAR__\"}')"
+    ]
+  }
+}
