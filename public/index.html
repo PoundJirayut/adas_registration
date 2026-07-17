@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +11,10 @@
   --bg:          #F0F4FF;
   --surface:     #FFFFFF;
   --surface-2:   #F5F7FF;
-  --border:      #E0E6F8;
+  --border:      #D8E0F4;
   --text-1:      #0B1027;
-  --text-2:      #3D4F78;
-  --text-3:      #8A9AC0;
+  --text-2:      #2A3A6A;
+  --text-3:      #5C6E9A;
   --accent:      #2B4EFF;
   --accent-dim:  #EEF1FF;
   --accent-hi:   #1A3AE0;
@@ -24,9 +24,9 @@
   --warn:        #D97706;
   --warn-bg:     #FFFBEB;
   --warn-text:   #92400E;
-  --shadow-sm:   0 1px 3px rgba(11,16,39,.06);
-  --shadow-md:   0 4px 16px rgba(11,16,39,.09), 0 1px 3px rgba(11,16,39,.04);
-  --shadow-lg:   0 8px 32px rgba(11,16,39,.12), 0 2px 6px rgba(11,16,39,.06);
+  --shadow-sm:   0 1px 3px rgba(11,16,39,.07);
+  --shadow-md:   0 4px 16px rgba(11,16,39,.1), 0 1px 3px rgba(11,16,39,.05);
+  --shadow-lg:   0 8px 32px rgba(11,16,39,.13), 0 2px 6px rgba(11,16,39,.06);
   --r:           14px;
   --r-sm:        9px;
   --r-xs:        5px;
@@ -35,7 +35,7 @@
   :root {
     --hd:#0B1027;
     --bg:#070D1E; --surface:#0F1629; --surface-2:#172038;
-    --border:#1E2D50; --text-1:#E0E8FF; --text-2:#6A85B8; --text-3:#324060;
+    --border:#1E2D50; --text-1:#E6ECFF; --text-2:#9EB5E0; --text-3:#6685B8;
     --accent:#5B78FF; --accent-dim:#0D1640; --accent-hi:#4060EE;
     --ok:#34D399; --ok-bg:#022C22; --ok-text:#34D399;
     --warn:#FCD34D; --warn-bg:#1C1000; --warn-text:#FCD34D;
@@ -45,18 +45,18 @@
   }
 }
 :root[data-theme="light"]{
-  --hd:#0B1027;--bg:#F0F4FF;--surface:#FFF;--surface-2:#F5F7FF;--border:#E0E6F8;
-  --text-1:#0B1027;--text-2:#3D4F78;--text-3:#8A9AC0;
+  --hd:#0B1027;--bg:#F0F4FF;--surface:#FFF;--surface-2:#F5F7FF;--border:#D8E0F4;
+  --text-1:#0B1027;--text-2:#2A3A6A;--text-3:#5C6E9A;
   --accent:#2B4EFF;--accent-dim:#EEF1FF;--accent-hi:#1A3AE0;
   --ok:#059669;--ok-bg:#ECFDF5;--ok-text:#065F46;
   --warn:#D97706;--warn-bg:#FFFBEB;--warn-text:#92400E;
-  --shadow-sm:0 1px 3px rgba(11,16,39,.06);
-  --shadow-md:0 4px 16px rgba(11,16,39,.09),0 1px 3px rgba(11,16,39,.04);
-  --shadow-lg:0 8px 32px rgba(11,16,39,.12),0 2px 6px rgba(11,16,39,.06);
+  --shadow-sm:0 1px 3px rgba(11,16,39,.07);
+  --shadow-md:0 4px 16px rgba(11,16,39,.1),0 1px 3px rgba(11,16,39,.05);
+  --shadow-lg:0 8px 32px rgba(11,16,39,.13),0 2px 6px rgba(11,16,39,.06);
 }
 :root[data-theme="dark"]{
   --hd:#0B1027;--bg:#070D1E;--surface:#0F1629;--surface-2:#172038;
-  --border:#1E2D50;--text-1:#E0E8FF;--text-2:#6A85B8;--text-3:#324060;
+  --border:#1E2D50;--text-1:#E6ECFF;--text-2:#9EB5E0;--text-3:#6685B8;
   --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;
   --ok:#34D399;--ok-bg:#022C22;--ok-text:#34D399;
   --warn:#FCD34D;--warn-bg:#1C1000;--warn-text:#FCD34D;
@@ -69,7 +69,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
-  font-size:15px;line-height:1.6;
+  font-size:16px;line-height:1.6;
   background:var(--bg);color:var(--text-1);min-height:100vh;
 }
 button{font-family:inherit;cursor:pointer}
@@ -101,7 +101,7 @@ input{font-family:inherit}
   font-weight: 700;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: rgba(91,120,255,.9);
+  color: rgba(91,120,255,.95);
   margin-bottom: .75rem;
 }
 .hd-title {
@@ -114,8 +114,8 @@ input{font-family:inherit}
   margin-bottom: .5rem;
 }
 .hd-sub {
-  font-size: .875rem;
-  color: rgba(255,255,255,.45);
+  font-size: .9rem;
+  color: rgba(255,255,255,.72);
   margin-bottom: 2rem;
 }
 
@@ -138,14 +138,17 @@ input{font-family:inherit}
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.18);
+  border: 2px solid rgba(255,255,255,.3);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: .75rem;
   font-weight: 700;
-  color: rgba(255,255,255,.3);
-  transition: all .3s ease;
+  color: rgba(255,255,255,.55);
+  transition: background .4s cubic-bezier(.22,1,.36,1),
+              border-color .4s cubic-bezier(.22,1,.36,1),
+              color .3s ease,
+              box-shadow .4s cubic-bezier(.22,1,.36,1);
   background: transparent;
 }
 .step-text {
@@ -153,33 +156,32 @@ input{font-family:inherit}
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.25);
-  transition: color .3s ease;
+  color: rgba(255,255,255,.5);
+  transition: color .35s ease;
   white-space: nowrap;
 }
 .step-connector {
   width: clamp(32px, 8vw, 72px);
   height: 1px;
-  background: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.18);
   margin-bottom: 1.25rem;
   flex-shrink: 0;
+  transition: background .45s ease;
 }
-/* Active step */
 .step-item.active .step-circle {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
-  box-shadow: 0 0 0 4px rgba(91,120,255,.25);
+  box-shadow: 0 0 0 4px rgba(91,120,255,.28);
 }
-.step-item.active .step-text { color: rgba(255,255,255,.9); }
-/* Done step */
+.step-item.active .step-text { color: rgba(255,255,255,.95); }
 .step-item.done .step-circle {
-  background: rgba(91,120,255,.25);
-  border-color: rgba(91,120,255,.5);
-  color: rgba(255,255,255,.7);
+  background: rgba(91,120,255,.28);
+  border-color: rgba(91,120,255,.55);
+  color: rgba(255,255,255,.8);
 }
-.step-item.done .step-text { color: rgba(255,255,255,.4); }
-.step-connector.done { background: rgba(91,120,255,.3); }
+.step-item.done .step-text { color: rgba(255,255,255,.55); }
+.step-connector.done { background: rgba(91,120,255,.35); }
 
 /* ── Main ──────────────────────────────────────────────────── */
 .main {
@@ -198,20 +200,28 @@ input{font-family:inherit}
 }
 .card + .card { margin-top: 1rem; }
 .card-enter {
-  animation: fadeUp .22s cubic-bezier(.22,1,.36,1) both;
+  animation: fadeUp .28s cubic-bezier(.22,1,.36,1) both;
+}
+.card-exit {
+  animation: fadeDown .18s cubic-bezier(.55,0,.8,.45) both;
+  pointer-events: none;
 }
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(14px); }
-  to   { opacity:1; transform:translateY(0); }
+  from { opacity:0; transform:translateY(16px) scale(.99); }
+  to   { opacity:1; transform:translateY(0)    scale(1); }
+}
+@keyframes fadeDown {
+  from { opacity:1; transform:translateY(0)   scale(1); }
+  to   { opacity:0; transform:translateY(8px) scale(.99); }
 }
 
 /* ── Search ────────────────────────────────────────────────── */
 .search-label {
-  font-size: .7rem;
+  font-size: .75rem;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--text-2);
   margin-bottom: .75rem;
 }
 .search-wrap {
@@ -291,8 +301,8 @@ input{font-family:inherit}
 /* ── States ────────────────────────────────────────────────── */
 .state { text-align:center; padding:3rem 1rem; }
 .state-icon { font-size:2rem; margin-bottom:.75rem; line-height:1; }
-.state-label { font-size:.9375rem; font-weight:600; color:var(--text-2); }
-.state-hint  { font-size:.8125rem; color:var(--text-3); margin-top:.3rem; }
+.state-label { font-size:.9375rem; font-weight:600; color:var(--text-1); }
+.state-hint  { font-size:.875rem; color:var(--text-2); margin-top:.4rem; }
 
 /* Skeleton loader */
 .skeleton { display:flex; flex-direction:column; gap:.75rem; padding:.5rem 0; }
@@ -302,15 +312,13 @@ input{font-family:inherit}
   background-size:200% 100%;
   animation:shimmer 1.4s infinite;
 }
-.skel-row:nth-child(2){height:56px}
-.skel-row:nth-child(3){height:56px}
 @keyframes shimmer { to { background-position:-200% 0; } }
 @media (prefers-reduced-motion: reduce) { .skel-row { animation: none; } }
 
 /* ── Section label ─────────────────────────────────────────── */
 .section-label {
-  font-size:.7rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--text-3);margin-bottom:.875rem;
+  font-size:.75rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-2);margin-bottom:.875rem;
 }
 
 /* ── Results ───────────────────────────────────────────────── */
@@ -318,7 +326,7 @@ input{font-family:inherit}
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:.875rem;
 }
-.results-count { font-size:.8125rem; color:var(--text-3); }
+.results-count { font-size:.875rem; font-weight:600; color:var(--text-2); }
 .result-list   { display:flex;flex-direction:column;gap:.5rem; }
 
 .result-item {
@@ -331,8 +339,12 @@ input{font-family:inherit}
   border-radius:var(--r-sm);
   cursor:pointer;
   background:var(--surface);
-  transition:border-color .15s, background .15s, box-shadow .15s, transform .1s;
+  transition:border-color .2s ease, background .2s ease,
+             box-shadow .2s ease, transform .2s cubic-bezier(.22,1,.36,1);
   position:relative;
+  opacity:0;
+  animation: fadeUp .28s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
 }
 .result-item:hover {
   border-color: var(--accent);
@@ -353,11 +365,11 @@ input{font-family:inherit}
 }
 .result-info { min-width:0; }
 .result-name {
-  font-weight:700;font-size:.9375rem;
+  font-weight:700;font-size:.9375rem;color:var(--text-1);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .result-title {
-  font-size:.8rem;color:var(--text-2);margin-top:.1rem;
+  font-size:.8375rem;color:var(--text-2);margin-top:.15rem;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 
@@ -372,14 +384,14 @@ input{font-family:inherit}
 .badge-open { background:var(--accent-dim); color:var(--accent); }
 .badge-dot  { width:5px;height:5px;border-radius:50%;background:currentColor; }
 
-/* ── Detail / Confirm card ─────────────────────────────────── */
+/* ── Detail card ───────────────────────────────────────────── */
 .card-hd {
   display:flex;align-items:flex-start;justify-content:space-between;
   gap:1rem;margin-bottom:1.375rem;padding-bottom:1.125rem;
   border-bottom:1px solid var(--border);
 }
-.card-hd-title { font-size:1.0625rem;font-weight:800;line-height:1.25; }
-.card-hd-sub   { font-size:.8125rem;color:var(--text-2);margin-top:.2rem; }
+.card-hd-title { font-size:1.0625rem;font-weight:800;line-height:1.25;color:var(--text-1); }
+.card-hd-sub   { font-size:.875rem;color:var(--text-2);margin-top:.25rem; }
 .btn-icon {
   background:none;border:none;color:var(--text-3);
   padding:.25rem;font-size:1.125rem;flex-shrink:0;cursor:pointer;
@@ -389,10 +401,10 @@ input{font-family:inherit}
 .btn-icon:hover { color:var(--text-1);background:var(--surface-2); }
 
 .fields { display:grid;gap:.75rem;margin-bottom:1.625rem; }
-.field  { display:grid;grid-template-columns:120px 1fr;gap:.625rem;align-items:start; }
+.field  { display:grid;grid-template-columns:130px 1fr;gap:.625rem;align-items:start; }
 .field-key {
-  font-size:.775rem;font-weight:700;letter-spacing:.03em;
-  color:var(--text-3);padding-top:.2rem;
+  font-size:.825rem;font-weight:700;letter-spacing:.02em;
+  color:var(--text-2);padding-top:.2rem;
 }
 .field-val      { font-size:.9375rem;color:var(--text-1);word-break:break-word;line-height:1.5; }
 .field-val-mono {
@@ -405,11 +417,11 @@ input{font-family:inherit}
 .notice {
   display:flex;gap:.625rem;align-items:flex-start;
   padding:.875rem 1rem;border-radius:var(--r-sm);
-  font-size:.875rem;margin-bottom:1.375rem;line-height:1.5;
+  font-size:.9rem;margin-bottom:1.375rem;line-height:1.55;
 }
 .notice-icon { flex-shrink:0; }
 .notice-warn { background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn); }
-.notice-info { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent); }
+.notice-info { background:var(--accent-dim);color:var(--accent-hi);border:1px solid rgba(43,78,255,.3); }
 
 /* ── Actions row ───────────────────────────────────────────── */
 .actions { display:flex;gap:.625rem; }
@@ -429,7 +441,7 @@ input{font-family:inherit}
   width:100%;height:100%;object-fit:cover;display:block;
 }
 
-/* Corner-bracket viewfinder overlay */
+/* Corner-bracket viewfinder */
 .cam-finder {
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -446,12 +458,11 @@ input{font-family:inherit}
   position:absolute;
   width:20px;height:20px;
 }
-.cam-finder-inner::before { top:0;left:0;border-top:2px solid rgba(255,255,255,.7);border-left:2px solid rgba(255,255,255,.7);border-radius:2px 0 0 0; }
-.cam-finder-inner::after  { top:0;right:0;border-top:2px solid rgba(255,255,255,.7);border-right:2px solid rgba(255,255,255,.7);border-radius:0 2px 0 0; }
-.cam-corner-br { bottom:0;right:0;border-bottom:2px solid rgba(255,255,255,.7);border-right:2px solid rgba(255,255,255,.7);border-radius:0 0 2px 0; }
-.cam-corner-bl { bottom:0;left:0;border-bottom:2px solid rgba(255,255,255,.7);border-left:2px solid rgba(255,255,255,.7);border-radius:0 0 0 2px; }
+.cam-finder-inner::before { top:0;left:0;border-top:2px solid rgba(255,255,255,.75);border-left:2px solid rgba(255,255,255,.75);border-radius:2px 0 0 0; }
+.cam-finder-inner::after  { top:0;right:0;border-top:2px solid rgba(255,255,255,.75);border-right:2px solid rgba(255,255,255,.75);border-radius:0 2px 0 0; }
+.cam-corner-br { bottom:0;right:0;border-bottom:2px solid rgba(255,255,255,.75);border-right:2px solid rgba(255,255,255,.75);border-radius:0 0 2px 0; }
+.cam-corner-bl { bottom:0;left:0;border-bottom:2px solid rgba(255,255,255,.75);border-left:2px solid rgba(255,255,255,.75);border-radius:0 0 0 2px; }
 
-/* Dim overlay around finder */
 .cam-dim {
   position:absolute;inset:0;
   box-shadow:inset 0 0 0 9999px rgba(0,0,0,.35);
@@ -470,7 +481,6 @@ input{font-family:inherit}
 }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-/* Shutter flash */
 .cam-flash {
   position:absolute;inset:0;
   background:#fff;
@@ -534,11 +544,11 @@ input{font-family:inherit}
 }
 .success-check.show { opacity:1;transform:scale(1); }
 .success-title { font-size:1.375rem;font-weight:900;color:var(--ok);margin-bottom:.4rem;letter-spacing:-.02em; }
-.success-name  { font-size:.9375rem;font-weight:600;color:var(--text-1);margin-bottom:.2rem; }
-.success-pname { font-size:.8125rem;color:var(--text-2);margin-bottom:.375rem; }
+.success-name  { font-size:.9375rem;font-weight:700;color:var(--text-1);margin-bottom:.2rem; }
+.success-pname { font-size:.875rem;color:var(--text-2);margin-bottom:.375rem; }
 .success-ts {
   font-family:'SF Mono','Cascadia Code','Consolas',monospace;
-  font-size:.775rem;color:var(--text-3);margin-bottom:1.875rem;
+  font-size:.8rem;color:var(--text-2);margin-bottom:1.875rem;
 }
 
 /* ── Utility ───────────────────────────────────────────────── */
@@ -564,27 +574,27 @@ input{font-family:inherit}
   <div class="hd-inner">
     <div class="hd-conf">ADAS Conference</div>
     <h1 class="hd-title">Paper Registration</h1>
-    <p class="hd-sub">ลงทะเบียนบทความเพื่อยืนยันการเข้าร่วมงาน</p>
+    <p class="hd-sub">Confirm your paper attendance by completing registration</p>
 
-    <nav class="steps" id="stepTrack" aria-label="ขั้นตอน">
+    <nav class="steps" id="stepTrack" aria-label="Steps">
       <div class="step-item active" id="s1">
         <div class="step-circle">1</div>
-        <div class="step-text">ค้นหา</div>
+        <div class="step-text">Search</div>
       </div>
       <div class="step-connector" id="sc1"></div>
       <div class="step-item" id="s2">
         <div class="step-circle">2</div>
-        <div class="step-text">ตรวจสอบ</div>
+        <div class="step-text">Verify</div>
       </div>
       <div class="step-connector" id="sc2"></div>
       <div class="step-item" id="s3">
         <div class="step-circle">3</div>
-        <div class="step-text">ถ่ายรูป</div>
+        <div class="step-text">Photo</div>
       </div>
       <div class="step-connector" id="sc3"></div>
       <div class="step-item" id="s4">
         <div class="step-circle">4</div>
-        <div class="step-text">สำเร็จ</div>
+        <div class="step-text">Done</div>
       </div>
     </nav>
   </div>
@@ -595,7 +605,7 @@ input{font-family:inherit}
 
   <!-- Search -->
   <div class="card" id="searchCard">
-    <div class="search-label">ค้นหาบทความ</div>
+    <div class="search-label">Find Your Paper</div>
     <div class="search-wrap">
       <div class="search-field">
         <span class="search-icon-el">
@@ -608,20 +618,20 @@ input{font-family:inherit}
           id="searchInput"
           class="search-input"
           type="text"
-          placeholder="ชื่อผู้แต่ง, ชื่อบทความ หรือ Paper ID…"
+          placeholder="Author name, paper title, or Paper ID…"
           autocomplete="off"
           spellcheck="false"
         >
       </div>
-      <button id="searchBtn" class="btn btn-primary" onclick="handleSearch()">ค้นหา</button>
+      <button id="searchBtn" class="btn btn-primary" onclick="handleSearch()">Search</button>
     </div>
-    <div id="loadHint" class="mt-sm hidden" style="font-size:.8rem;color:var(--text-3)">กำลังโหลดข้อมูล…</div>
+    <div id="loadHint" class="mt-sm hidden" style="font-size:.875rem;color:var(--text-2)">Loading data…</div>
   </div>
 
   <!-- Results -->
   <div id="resultsCard" class="card hidden">
     <div class="results-hd">
-      <div class="section-label">ผลการค้นหา</div>
+      <div class="section-label">Search Results</div>
       <div id="resultsCount" class="results-count"></div>
     </div>
     <div id="resultList" class="result-list"></div>
@@ -631,10 +641,10 @@ input{font-family:inherit}
   <div id="detailCard" class="card hidden">
     <div class="card-hd">
       <div>
-        <div class="card-hd-title">ตรวจสอบข้อมูล</div>
-        <div class="card-hd-sub">ยืนยันความถูกต้องก่อนดำเนินการต่อ</div>
+        <div class="card-hd-title">Paper Details</div>
+        <div class="card-hd-sub">Verify your details before proceeding</div>
       </div>
-      <button class="btn-icon" onclick="closeDetail()" title="ปิด" aria-label="ปิด">
+      <button class="btn-icon" onclick="closeDetail()" title="Close" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
         </svg>
@@ -646,14 +656,14 @@ input{font-family:inherit}
         <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
         <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
       </svg>
-      <span>บทความนี้ <strong>ลงทะเบียนแล้ว</strong> — ไม่สามารถลงทะเบียนซ้ำได้</span>
+      <span>This paper is <strong>already registered</strong> — duplicate registration is not allowed.</span>
     </div>
     <div id="noticeReady" class="notice notice-info hidden">
       <svg class="notice-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
         <path d="M5 8.5l2.5 2.5L11.5 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span>พร้อมลงทะเบียน — กด "ถัดไป" เพื่อถ่ายรูปยืนยัน</span>
+      <span>Ready to register — click <strong>Take Photo &amp; Register</strong> to continue.</span>
     </div>
 
     <div class="fields">
@@ -662,31 +672,31 @@ input{font-family:inherit}
         <span id="dPaperId" class="field-val field-val-mono"></span>
       </div>
       <div class="field">
-        <span class="field-key">ชื่อผู้แต่ง</span>
+        <span class="field-key">Author</span>
         <span id="dName" class="field-val"></span>
       </div>
       <div class="field">
-        <span class="field-key">ชื่อบทความ</span>
+        <span class="field-key">Title</span>
         <span id="dTitle" class="field-val"></span>
       </div>
       <div class="field">
-        <span class="field-key">สถานะ</span>
+        <span class="field-key">Status</span>
         <span id="dStatus" class="field-val"></span>
       </div>
       <div id="dLastRow" class="field hidden">
-        <span class="field-key">ลงทะเบียนเมื่อ</span>
+        <span class="field-key">Registered At</span>
         <span id="dLast" class="field-val field-val-mono"></span>
       </div>
     </div>
 
     <div class="actions">
-      <button class="btn btn-ghost" onclick="closeDetail()">ย้อนกลับ</button>
+      <button class="btn btn-ghost" onclick="closeDetail()">Back</button>
       <button id="confirmBtn" class="btn btn-primary" onclick="openCamera()">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
           <path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
           <circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/>
         </svg>
-        ถ่ายรูป &amp; ลงทะเบียน
+        Take Photo &amp; Register
       </button>
     </div>
   </div>
@@ -695,10 +705,10 @@ input{font-family:inherit}
   <div id="cameraCard" class="card hidden">
     <div class="card-hd">
       <div>
-        <div class="card-hd-title">ถ่ายรูปยืนยัน</div>
-        <div class="card-hd-sub" id="camSubtitle">จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม</div>
+        <div class="card-hd-title">Capture Photo</div>
+        <div class="card-hd-sub" id="camSubtitle">Position within the frame, then press the shutter</div>
       </div>
-      <button class="btn-icon" onclick="cancelCamera()" aria-label="ย้อนกลับ">
+      <button class="btn-icon" onclick="cancelCamera()" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
         </svg>
@@ -724,8 +734,8 @@ input{font-family:inherit}
 
     <!-- Shoot mode -->
     <div id="shootControls" class="cam-controls">
-      <button class="btn btn-ghost" onclick="cancelCamera()">ย้อนกลับ</button>
-      <button class="shutter-btn" onclick="capturePhoto()" aria-label="ถ่ายรูป">
+      <button class="btn btn-ghost" onclick="cancelCamera()">Back</button>
+      <button class="shutter-btn" onclick="capturePhoto()" aria-label="Take photo">
         <div class="shutter-inner"></div>
       </button>
       <div style="flex:1;max-width:90px"></div>
@@ -733,12 +743,12 @@ input{font-family:inherit}
 
     <!-- Retake mode -->
     <div id="retakeControls" class="cam-controls hidden">
-      <button class="btn btn-ghost" style="flex:1" onclick="retakePhoto()">ถ่ายใหม่</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="retakePhoto()">Retake</button>
       <button id="submitBtn" class="btn btn-ok" style="flex:2" onclick="submitRegistration()">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        ยืนยัน &amp; ลงทะเบียน
+        Confirm &amp; Register
       </button>
     </div>
   </div>
@@ -753,12 +763,12 @@ input{font-family:inherit}
         </svg>
         <div class="success-check" id="successCheck">✓</div>
       </div>
-      <div class="success-title">ลงทะเบียนสำเร็จ</div>
+      <div class="success-title">Registration Complete</div>
       <p class="success-name"  id="successName"></p>
       <p class="success-pname" id="successTitle"></p>
       <p class="success-ts"    id="successTs"></p>
       <button class="btn btn-primary" onclick="resetAll()" style="min-width:160px;margin:0 auto">
-        ลงทะเบียนเพิ่มเติม
+        Register Another
       </button>
     </div>
   </div>
@@ -772,10 +782,40 @@ let selectedRow = null;
 let camStream   = null;
 let capturedB64 = null;
 
+// ── Transition helpers ─────────────────────────────────────────
+const CARD_EXIT_MS = 180;
+
+function exitCard(id, cb) {
+  const el = document.getElementById(id);
+  if (!el || el.classList.contains('hidden')) { cb && cb(); return; }
+  el.classList.add('card-exit');
+  setTimeout(() => {
+    el.classList.add('hidden');
+    el.classList.remove('card-exit');
+    cb && cb();
+  }, CARD_EXIT_MS);
+}
+
+function enterCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('hidden', 'card-exit');
+  el.offsetHeight; // force reflow so animation restarts
+  el.classList.add('card-enter');
+  el.addEventListener('animationend', () => el.classList.remove('card-enter'), { once: true });
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Exit old cards while simultaneously entering new card
+function transitTo(hideIds, showId) {
+  hideIds.forEach(id => exitCard(id));
+  setTimeout(() => enterCard(showId), 60);
+}
+
 // ── Step tracker ───────────────────────────────────────────────
 const STEPS = ['s1','s2','s3','s4'];
 const CONNS  = ['sc1','sc2','sc3'];
-function setStep(n) { // 1-4
+function setStep(n) {
   STEPS.forEach((id,i) => {
     const el = document.getElementById(id);
     el.classList.remove('active','done');
@@ -813,12 +853,12 @@ async function preloadData() {
 // ── Search ─────────────────────────────────────────────────────
 async function handleSearch() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  if (!q) { showMsg('กรุณาพิมพ์คำค้นหา'); return; }
+  if (!q) { showMsg('Please enter a search term.'); return; }
 
   hideCards();
   setStep(1);
   const btn = document.getElementById('searchBtn');
-  btn.disabled = true; btn.textContent = 'กำลังค้นหา…';
+  btn.disabled = true; btn.textContent = 'Searching…';
 
   try {
     if (!allRows) {
@@ -834,9 +874,9 @@ async function handleSearch() {
     );
     renderResults(hits, q);
   } catch (err) {
-    showMsg('โหลดข้อมูลไม่ได้: ' + err.message, true);
+    showMsg('Failed to load data: ' + err.message, true);
   } finally {
-    btn.disabled = false; btn.textContent = 'ค้นหา';
+    btn.disabled = false; btn.textContent = 'Search';
   }
 }
 
@@ -844,30 +884,29 @@ function norm(s) { return String(s ?? '').toLowerCase(); }
 
 // ── Results ─────────────────────────────────────────────────────
 function renderResults(hits, query) {
-  const card = document.getElementById('resultsCard');
-  card.classList.remove('hidden');
-  card.classList.add('card-enter');
-  setTimeout(() => card.classList.remove('card-enter'), 300);
+  enterCard('resultsCard');
 
   const list = document.getElementById('resultList');
   list.innerHTML = '';
-  document.getElementById('resultsCount').textContent = hits.length ? `พบ ${hits.length} รายการ` : '';
+  document.getElementById('resultsCount').textContent =
+    hits.length ? `${hits.length} result${hits.length !== 1 ? 's' : ''} found` : '';
 
   if (!hits.length) {
     list.innerHTML = `<div class="state">
       <div class="state-icon">🔍</div>
-      <div class="state-label">ไม่พบบทความที่ตรงกับ "${esc(query)}"</div>
-      <div class="state-hint">ลองค้นด้วย Paper ID หรือชื่อผู้แต่ง</div>
+      <div class="state-label">No papers found matching "${esc(query)}"</div>
+      <div class="state-hint">Try searching by Paper ID or author name</div>
     </div>`;
     return;
   }
 
-  hits.forEach(row => {
+  hits.forEach((row, i) => {
     const isReg = row['Status'] === 'Registed';
     const el    = document.createElement('div');
     el.className = 'result-item';
     el.tabIndex  = 0;
     el.setAttribute('role', 'button');
+    el.style.setProperty('--i', i);
     el.innerHTML = `
       <span class="result-pid">${esc(row['Paper-ID'])}</span>
       <div class="result-info">
@@ -876,7 +915,7 @@ function renderResults(hits, query) {
       </div>
       <span class="badge ${isReg ? 'badge-ok' : 'badge-open'}">
         <span class="badge-dot"></span>
-        ${isReg ? 'ลงทะเบียนแล้ว' : 'ยังไม่ได้ลงทะเบียน'}
+        ${isReg ? 'Registered' : 'Not Registered'}
       </span>`;
     el.addEventListener('click',   () => openDetail(row));
     el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') openDetail(row); });
@@ -885,10 +924,7 @@ function renderResults(hits, query) {
 }
 
 function showMsg(msg, isErr) {
-  const card = document.getElementById('resultsCard');
-  card.classList.remove('hidden');
-  card.classList.add('card-enter');
-  setTimeout(() => card.classList.remove('card-enter'), 300);
+  enterCard('resultsCard');
   document.getElementById('resultsCount').textContent = '';
   document.getElementById('resultList').innerHTML = `<div class="state">
     ${isErr ? '<div class="state-icon">⚠️</div>' : ''}
@@ -906,7 +942,7 @@ function openDetail(row) {
   setText('dTitle',   row['Peper-Title']);
 
   document.getElementById('dStatus').innerHTML = `<span class="badge ${isReg ? 'badge-ok':'badge-open'}">
-    <span class="badge-dot"></span>${isReg ? 'ลงทะเบียนแล้ว' : 'ยังไม่ได้ลงทะเบียน'}</span>`;
+    <span class="badge-dot"></span>${isReg ? 'Registered' : 'Not Registered'}</span>`;
 
   const lastRow = document.getElementById('dLastRow');
   if (row['Last_status_cheanged']) {
@@ -922,19 +958,15 @@ function openDetail(row) {
   const confirmBtn = document.getElementById('confirmBtn');
   confirmBtn.disabled = isReg;
   confirmBtn.innerHTML = isReg
-    ? 'ลงทะเบียนแล้ว'
-    : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/></svg> ถ่ายรูป &amp; ลงทะเบียน`;
+    ? 'Already Registered'
+    : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/></svg> Take Photo &amp; Register`;
 
-  const card = document.getElementById('detailCard');
-  card.classList.remove('hidden');
-  card.classList.add('card-enter');
-  setTimeout(() => card.classList.remove('card-enter'), 300);
-  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  transitTo(['resultsCard'], 'detailCard');
   setStep(2);
 }
 
 function closeDetail() {
-  hide('detailCard');
+  exitCard('detailCard');
   selectedRow = null;
   setStep(1);
 }
@@ -942,20 +974,14 @@ function closeDetail() {
 // ── Camera ─────────────────────────────────────────────────────
 async function openCamera() {
   if (!selectedRow) return;
-  hide('detailCard');
   capturedB64 = null;
 
-  // Reset camera UI
   show('camVideo'); hide('camPreview');
   show('camFinder'); hide('camSpinner');
   show('shootControls'); hide('retakeControls');
-  document.getElementById('camSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม';
+  document.getElementById('camSubtitle').textContent = 'Position within the frame, then press the shutter';
 
-  const card = document.getElementById('cameraCard');
-  card.classList.remove('hidden');
-  card.classList.add('card-enter');
-  setTimeout(() => card.classList.remove('card-enter'), 300);
-  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  transitTo(['detailCard'], 'cameraCard');
   setStep(3);
 
   show('camSpinner'); hide('camFinder');
@@ -967,7 +993,7 @@ async function openCamera() {
     hide('camSpinner'); show('camFinder');
   } catch (err) {
     hide('camSpinner');
-    alert('ไม่สามารถเข้าถึงกล้องได้:\n' + err.message);
+    alert('Cannot access camera:\n' + err.message);
     cancelCamera();
   }
 }
@@ -981,7 +1007,6 @@ function capturePhoto() {
   canvas.height = Math.round(video.videoHeight * ratio);
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Shutter flash effect
   const flash = document.getElementById('camFlash');
   flash.classList.add('on');
   setTimeout(() => flash.classList.remove('on'), 180);
@@ -992,7 +1017,7 @@ function capturePhoto() {
   document.getElementById('camPreview').src = dataUrl;
   show('camPreview'); hide('camVideo'); hide('camFinder');
   hide('shootControls'); show('retakeControls');
-  document.getElementById('camSubtitle').textContent = 'ตรวจสอบรูป — กด "ถ่ายใหม่" หรือ "ยืนยัน"';
+  document.getElementById('camSubtitle').textContent = 'Review photo — press "Retake" or "Confirm & Register"';
   stopStream();
 }
 
@@ -1000,19 +1025,23 @@ function retakePhoto() {
   capturedB64 = null;
   hide('camPreview'); show('camVideo'); show('camFinder');
   hide('retakeControls'); show('shootControls');
-  document.getElementById('camSubtitle').textContent = 'จัดตำแหน่งให้อยู่ในกรอบ แล้วกดปุ่มวงกลม';
+  document.getElementById('camSubtitle').textContent = 'Position within the frame, then press the shutter';
 
   show('camSpinner'); hide('camFinder');
   navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } } })
     .then(s => { camStream = s; document.getElementById('camVideo').srcObject = s; hide('camSpinner'); show('camFinder'); })
-    .catch(err => { hide('camSpinner'); alert('ไม่สามารถเปิดกล้อง: ' + err.message); });
+    .catch(err => { hide('camSpinner'); alert('Cannot open camera: ' + err.message); });
 }
 
 function cancelCamera() {
   stopStream();
   capturedB64 = null;
-  hide('cameraCard');
-  if (selectedRow) { show('detailCard'); setStep(2); }
+  if (selectedRow) {
+    transitTo(['cameraCard'], 'detailCard');
+    setStep(2);
+  } else {
+    exitCard('cameraCard');
+  }
 }
 
 function stopStream() {
@@ -1024,7 +1053,7 @@ async function submitRegistration() {
   if (!capturedB64 || !selectedRow) return;
 
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.textContent = 'กำลังบันทึก…';
+  btn.disabled = true; btn.textContent = 'Saving…';
 
   try {
     const res  = await fetch('/api/register', {
@@ -1048,53 +1077,50 @@ async function submitRegistration() {
       hide('cameraCard');
       openDetail(selectedRow);
     } else {
-      alert('เกิดข้อผิดพลาด: ' + (data.message || 'Unknown error'));
+      alert('Error: ' + (data.message || 'Unknown error'));
       btn.disabled = false;
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยัน &amp; ลงทะเบียน`;
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> Confirm &amp; Register`;
     }
   } catch (err) {
-    alert('ไม่สามารถเชื่อมต่อ server ได้:\n' + err.message);
+    alert('Cannot connect to server:\n' + err.message);
     btn.disabled = false;
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยัน &amp; ลงทะเบียน`;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg> Confirm &amp; Register`;
   }
 }
 
 // ── Success ────────────────────────────────────────────────────
 function showSuccess(data) {
-  hideCards();
   setStep(4);
-  const card = document.getElementById('successCard');
-  card.classList.remove('hidden');
-  card.classList.add('card-enter');
-  setTimeout(() => card.classList.remove('card-enter'), 300);
-
   setText('successName',  data.name  || selectedRow?.['Name'] || '');
   setText('successTitle', data.title || selectedRow?.['Peper-Title'] || '');
-  setText('successTs', `ลงทะเบียนเมื่อ ${data.timestamp}`);
+  setText('successTs', `Registered at ${data.timestamp}`);
 
-  // Animate ring + checkmark
+  transitTo(['cameraCard'], 'successCard');
+
   setTimeout(() => {
     document.getElementById('successRing').classList.add('draw');
     document.getElementById('successCheck').classList.add('show');
-  }, 80);
+  }, 280);
 }
 
 function resetAll() {
   document.getElementById('searchInput').value = '';
   selectedRow = null;
-  hideCards();
   setStep(1);
-  // Reset ring animation for next use
-  const ring  = document.getElementById('successRing');
-  const check = document.getElementById('successCheck');
-  ring.classList.remove('draw');
-  check.classList.remove('show');
+  exitCard('successCard', () => {
+    document.getElementById('successRing').classList.remove('draw');
+    document.getElementById('successCheck').classList.remove('show');
+  });
+  ['resultsCard','detailCard','cameraCard'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.classList.contains('hidden')) exitCard(id);
+  });
 }
 
 // ── Helpers ────────────────────────────────────────────────────
 function hideCards() {
   stopStream();
-  ['resultsCard','detailCard','cameraCard','successCard'].forEach(hide);
+  ['resultsCard','detailCard','cameraCard','successCard'].forEach(id => hide(id));
 }
 function show(id)       { document.getElementById(id).classList.remove('hidden'); }
 function hide(id)       { document.getElementById(id).classList.add('hidden'); }
