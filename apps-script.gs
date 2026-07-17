@@ -17,41 +17,52 @@
 const SHEET_ID     = '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
 const DRIVE_FOLDER = 'APSIPA_Registration_Photos';
 
-// ── doGet ──────────────────────────────────────────────────────
-function doGet(e) {
-  const action = e.parameter.action;
-
-  if (action === 'register') {
-    const result = registerPaper(
-      e.parameter.paperId,
-      e.parameter.imageUrl || ''
-    );
+// ── doPost — รับ base64 image โดยตรง (ใช้งานจริง) ─────────────
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+    if (payload.action === 'register') {
+      const result = registerPaper(payload.paperId, payload.imageBase64 || '');
+      return ContentService
+        .createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
     return ContentService
-      .createTextOutput(JSON.stringify(result))
+      .createTextOutput(JSON.stringify({ success: false, message: 'Unknown action' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, message: 'doPost error: ' + err.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// ── doGet — health check + info ────────────────────────────────
+function doGet(e) {
+  const action = e.parameter.action;
 
   if (action === 'info') {
     const folders = DriveApp.getFoldersByName(DRIVE_FOLDER);
     const folder  = folders.hasNext() ? folders.next() : null;
     return ContentService
       .createTextOutput(JSON.stringify({
-        status:     'ok',
-        folder:     DRIVE_FOLDER,
-        folderUrl:  folder ? 'https://drive.google.com/drive/folders/' + folder.getId() : '(not created yet — upload a photo first)',
-        sheetId:    SHEET_ID,
+        status:    'ok',
+        folder:    DRIVE_FOLDER,
+        folderUrl: folder
+          ? 'https://drive.google.com/drive/folders/' + folder.getId()
+          : '(not created yet — upload a photo first)',
+        sheetId:   SHEET_ID,
       }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  // Health check — useful for testing if the deployment is live
   return ContentService
     .createTextOutput(JSON.stringify({ status: 'ok', message: 'APSIPA Registration API' }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ── registerPaper ──────────────────────────────────────────────
-function registerPaper(paperId, imageUrl) {
+function registerPaper(paperId, imageBase64) {
   if (!paperId) return { success: false, message: 'paperId is required' };
 
   try {
@@ -83,23 +94,22 @@ function registerPaper(paperId, imageUrl) {
       sheet.getRange(i + 1, col.status + 1).setValue('Registed');
       sheet.getRange(i + 1, col.lastChanged + 1).setValue(timestamp);
 
-      // Upload photo to Google Drive
-      let driveUrl    = '';
-      let driveError  = '';
-      if (imageUrl) {
-        if (col.picture === -1) {
-          driveError = 'No "Picture" column found in sheet — skipping Drive upload';
+      // Upload base64 image to Google Drive
+      let driveUrl   = '';
+      let driveError = '';
+      if (imageBase64 && col.picture !== -1) {
+        const result = uploadBase64ToDrive(paperId, imageBase64);
+        if (result.url) {
+          driveUrl = result.url;
+          sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
         } else {
-          const uploadResult = uploadToDrive(paperId, imageUrl);
-          if (uploadResult.url) {
-            driveUrl = uploadResult.url;
-            sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
-          } else {
-            driveError = uploadResult.error;
-            // Still store the original URL as fallback
-            sheet.getRange(i + 1, col.picture + 1).setValue(imageUrl + ' (Drive upload failed: ' + uploadResult.error + ')');
-          }
+          driveError = result.error;
+          console.error('Drive upload failed for', paperId, ':', driveError);
         }
+      } else if (!imageBase64) {
+        driveError = 'No image provided';
+      } else if (col.picture === -1) {
+        driveError = 'No "Picture" column in sheet';
       }
 
       return {
@@ -108,7 +118,6 @@ function registerPaper(paperId, imageUrl) {
         name:       data[i][col.name],
         title:      data[i][col.title],
         paperId:    rowId,
-        imageUrl:   driveUrl || imageUrl,
         driveUrl,
         driveError: driveError || undefined,
       };
@@ -120,29 +129,17 @@ function registerPaper(paperId, imageUrl) {
   }
 }
 
-// ── uploadToDrive ──────────────────────────────────────────────
-// Fetches the photo from the Railway server URL and saves it to Google Drive.
-// Returns { url } on success or { error } on failure.
-function uploadToDrive(paperId, sourceUrl) {
+// ── uploadBase64ToDrive ────────────────────────────────────────
+// รับ base64 string → decode → อัพโหลดเข้า Google Drive folder
+function uploadBase64ToDrive(paperId, base64) {
   try {
-    // sourceUrl must be a publicly accessible URL (works on Railway, not on localhost)
-    const response = UrlFetchApp.fetch(sourceUrl, {
-      muteHttpExceptions: true,
-      followRedirects:    true,
-    });
+    const decoded  = Utilities.base64Decode(base64);
+    const blob     = Utilities.newBlob(decoded, 'image/jpeg', paperId + '_' + Date.now() + '.jpg');
 
-    const code = response.getResponseCode();
-    if (code !== 200) {
-      return { error: 'Fetch failed with HTTP ' + code + ' — is the server publicly accessible?' };
-    }
+    const folders  = DriveApp.getFoldersByName(DRIVE_FOLDER);
+    const folder   = folders.hasNext() ? folders.next() : DriveApp.createFolder(DRIVE_FOLDER);
 
-    const filename = paperId + '_' + Date.now() + '.jpg';
-    const blob     = response.getBlob().setName(filename);
-
-    const folders = DriveApp.getFoldersByName(DRIVE_FOLDER);
-    const folder  = folders.hasNext() ? folders.next() : DriveApp.createFolder(DRIVE_FOLDER);
-
-    const file = folder.createFile(blob);
+    const file     = folder.createFile(blob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
     return { url: 'https://drive.google.com/file/d/' + file.getId() + '/view' };

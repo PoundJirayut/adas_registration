@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const axios   = require('axios');
 const path    = require('path');
-const fs      = require('fs');
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
@@ -11,11 +10,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 const SHEET_ID   = process.env.SHEET_ID  || '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
 const SCRIPT_URL = process.env.SCRIPT_URL || '';
 const PORT       = process.env.PORT       || 3000;
-const BASE_URL   = process.env.BASE_URL
-  || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : `http://localhost:${PORT}`);
-
-const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 // ── GET /api/data ──────────────────────────────────────────────
 app.get('/api/data', async (req, res) => {
@@ -53,24 +47,27 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ success: false, message: 'paperId is required' });
   }
   if (!SCRIPT_URL) {
-    return res.status(500).json({ success: false, message: 'SCRIPT_URL ยังไม่ได้ตั้งค่าใน .env' });
+    return res.status(500).json({ success: false, message: 'SCRIPT_URL not configured in .env' });
   }
 
   try {
-    // ── 1. บันทึกรูปไว้ที่ public/uploads/ ──────────────────────
-    let imageUrl = '';
-    if (imageBase64) {
-      const filename = `${paperId}_${Date.now()}.jpg`;
-      const filepath = path.join(UPLOAD_DIR, filename);
-      fs.writeFileSync(filepath, Buffer.from(imageBase64, 'base64'));
-      imageUrl = `${BASE_URL}/uploads/${filename}`;
+    // POST base64 directly to Apps Script — no local file, no public URL needed
+    const payload = JSON.stringify({ action: 'register', paperId, imageBase64: imageBase64 || '' });
+
+    // Apps Script exec URL returns 302 on POST; follow redirect while keeping POST + body
+    let resp = await axios.post(SCRIPT_URL, payload, {
+      headers: { 'Content-Type': 'application/json' },
+      maxRedirects: 0,
+      validateStatus: () => true,
+    });
+
+    if (resp.status === 301 || resp.status === 302) {
+      const redirectUrl = resp.headers.location;
+      resp = await axios.post(redirectUrl, payload, {
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    // ── 2. เรียก Apps Script ผ่าน GET (เชื่อถือได้, ไม่มี redirect ปัญหา) ──
-    const scriptParams = new URLSearchParams({ action: 'register', paperId });
-    if (imageUrl) scriptParams.set('imageUrl', imageUrl);
-
-    const resp = await axios.get(`${SCRIPT_URL}?${scriptParams.toString()}`);
     const data = resp.data;
     if (data.driveError) {
       console.warn('[/api/register] Drive upload warning:', data.driveError);
@@ -86,8 +83,8 @@ app.post('/api/register', async (req, res) => {
 
 // ── Start ──────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n  ADAS Registration running at http://localhost:${PORT}\n`);
+  console.log(`\n  APSIPA Registration running at http://localhost:${PORT}\n`);
   if (!SCRIPT_URL) {
-    console.warn('  ⚠  SCRIPT_URL ยังไม่ได้ตั้งค่า — การลงทะเบียนจะยังไม่ทำงาน\n');
+    console.warn('  ⚠  SCRIPT_URL not configured — registration will not work\n');
   }
 });
