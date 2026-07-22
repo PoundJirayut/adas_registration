@@ -804,6 +804,17 @@ input{font-family:inherit}
     </div>
   </div>
 
+  <!-- Quota Error -->
+  <div id="quotaCard" class="card hidden">
+    <div class="success-wrap">
+      <div class="state-icon" style="font-size:2.5rem;margin-bottom:.875rem">⚠️</div>
+      <div style="font-size:1.125rem;font-weight:900;color:var(--warn-text);margin-bottom:.5rem">Google Apps Script Quota เต็ม</div>
+      <p style="font-size:.9rem;color:var(--text-2);margin-bottom:.375rem">การลงทะเบียนล้มเหลว เนื่องจาก Google Apps Script ถึง Daily Quota Limit</p>
+      <p style="font-size:.875rem;color:var(--text-3);margin-bottom:1.875rem">Quota จะรีเซ็ตอัตโนมัติเวลาเที่ยงคืน (UTC) — ลองใหม่อีกครั้งพรุ่งนี้ หรือติดต่อผู้ดูแลระบบเพื่อขอ Google Workspace account</p>
+      <button class="btn btn-primary" onclick="resetAll()" style="min-width:160px;margin:0 auto">กลับหน้าหลัก</button>
+    </div>
+  </div>
+
   <!-- Success -->
   <div id="successCard" class="card hidden">
     <div class="success-wrap">
@@ -814,6 +825,13 @@ input{font-family:inherit}
           <circle class="success-ring-fill" id="successRing" cx="40" cy="40" r="35"/>
         </svg>
         <div class="success-check" id="successCheck">✓</div>
+      </div>
+      <div class="notice notice-warn hidden" id="successDriveWarn" style="text-align:left;margin-bottom:1rem">
+        <svg class="notice-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+        <span>Registered ✓ — แต่ไม่สามารถอัปโหลดรูปได้ เนื่องจาก Google Drive Quota หมด (รีเซ็ตเที่ยงคืน)</span>
       </div>
       <div class="success-title">Registration Complete</div>
       <p class="success-name"  id="successName"></p>
@@ -1168,6 +1186,9 @@ async function submitRegistration() {
     } else if (data.alreadyRegistered) {
       hide('cameraCard');
       openDetail(selectedRow);
+    } else if (data.quotaExceeded || data.message === 'quota_exceeded') {
+      hide('cameraCard');
+      showQuotaError();
     } else {
       alert('Error: ' + (data.message || 'Unknown error'));
       btn.disabled = false;
@@ -1186,6 +1207,8 @@ function showSuccess(data) {
   setText('successName',  data.name  || selectedRow?.['Name'] || '');
   setText('successTitle', data.title || selectedRow?.['Paper-Title'] || '');
   setText('successTs', `Registered at ${data.timestamp}`);
+  const driveWarn = document.getElementById('successDriveWarn');
+  driveWarn.classList.toggle('hidden', data.driveError !== 'quota_exceeded');
 
   const photoEl = document.getElementById('successPhoto');
   if (capturedB64) {
@@ -1212,7 +1235,7 @@ function resetAll() {
     document.getElementById('successRing').classList.remove('draw');
     document.getElementById('successCheck').classList.remove('show');
   });
-  ['resultsCard','detailCard','cameraCard'].forEach(id => {
+  ['resultsCard','detailCard','cameraCard','quotaCard'].forEach(id => {
     const el = document.getElementById(id);
     if (!el.classList.contains('hidden')) exitCard(id);
   });
@@ -1221,7 +1244,7 @@ function resetAll() {
 // ── Helpers ────────────────────────────────────────────────────
 function hideCards() {
   stopStream();
-  ['resultsCard','detailCard','cameraCard','successCard'].forEach(id => hide(id));
+  ['resultsCard','detailCard','cameraCard','successCard','quotaCard'].forEach(id => hide(id));
 }
 function show(id)       { document.getElementById(id).classList.remove('hidden'); }
 function hide(id)       { document.getElementById(id).classList.add('hidden'); }
@@ -1229,6 +1252,13 @@ function setText(id, v) { document.getElementById(id).textContent = v ?? '—'; 
 function esc(s) {
   return String(s ?? '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Quota error ────────────────────────────────────────────────
+function showQuotaError() {
+  stopStream();
+  ['cameraCard','detailCard','resultsCard'].forEach(id => hide(id));
+  transitTo(['cameraCard'], 'quotaCard');
 }
 
 // ── Override / PIN ─────────────────────────────────────────────

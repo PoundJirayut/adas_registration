@@ -19,7 +19,22 @@
       "Bash(lsof -ti:3001)",
       "Bash(xargs kill -9)",
       "Bash(curl -s http://localhost:3001/api/export)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(curl -s -X POST http://localhost:3001/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"test\"}')",
+      "Bash(lsof -ti:3000 -ti:3001)",
+      "Bash(xargs -I{} ps -p {} -o pid,command)",
+      "Bash(curl -s -X POST http://localhost:3000/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"APSIPA2025\"}')",
+      "Bash(curl -sv http://localhost:3001/api/validate-pin -X POST -H 'Content-Type: application/json' -d '{\"pin\":\"test\"}')",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:3001/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"test\"}')",
+      "Bash(# Check the actual file the running process is using *)",
+      "Read(//proc/52574/**)",
+      "Bash(ps -p 52574 -o lstart=)",
+      "Bash(kill 52574)",
+      "Bash(curl -s -w \"\\\\nHTTP:%{http_code}\" http://localhost:3001/api/data)",
+      "Bash(curl -s -w '\\\\nHTTP:%{http_code}' -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test01\",\"force\":true,\"adminPin\":\"APSIPA2025\"}')",
+      "Bash(curl -s -w '\\\\nHTTP:%{http_code}' -X POST http://localhost:3001/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"x\"}')",
+      "Bash(curl -s -w \"\\\\nHTTP:%{http_code}\" http://localhost:3001/manifest.json)",
+      "Bash(curl -s -o /dev/null -w \"sw.js HTTP:%{http_code}\\\\n\" http://localhost:3001/sw.js)"
     ]
   }
 }

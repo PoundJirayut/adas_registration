@@ -112,7 +112,7 @@ function registerPaper(paperId, imageBase64, imageUrl, force) {
           driveUrl = result.url;
           sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
         } else {
-          driveError = result.error;
+          driveError = result.quotaExceeded ? 'quota_exceeded' : result.error;
         }
       }
 
@@ -129,7 +129,9 @@ function registerPaper(paperId, imageBase64, imageUrl, force) {
 
     return { success: false, message: 'Paper ID not found: ' + paperId };
   } catch (err) {
-    return { success: false, message: 'Server error: ' + err.message };
+    const msg = err.message || '';
+    const isQuota = msg.toLowerCase().includes('quota') || msg.toLowerCase().includes('limit exceeded');
+    return { success: false, quotaExceeded: isQuota, message: isQuota ? 'quota_exceeded' : 'Server error: ' + msg };
   } finally {
     lock.releaseLock();
   }
@@ -148,7 +150,9 @@ function uploadToDriveBase64(paperId, imageBase64) {
 
     return { url: 'https://drive.google.com/file/d/' + file.getId() + '/view' };
   } catch (err) {
-    return { error: err.message };
+    const msg = err.message || '';
+    const isQuota = msg.toLowerCase().includes('quota') || msg.toLowerCase().includes('limit exceeded');
+    return { error: msg, quotaExceeded: isQuota };
   }
 }
 

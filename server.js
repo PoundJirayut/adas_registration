@@ -135,9 +135,15 @@ app.post('/api/register', async (req, res) => {
     if (data.success) {
       if (data.driveUrl) {
         console.log('[/api/register] Drive upload OK:', data.driveUrl);
+      } else if (data.driveError === 'quota_exceeded') {
+        console.warn('[/api/register] Drive quota exceeded — registration saved without photo');
+        data.driveError = 'quota_exceeded';
       } else {
-        console.warn('[/api/register] Drive upload failed:', data.driveError || '(no driveError returned — check Picture column name in sheet)');
+        console.warn('[/api/register] Drive upload skipped:', data.driveError || '(check Picture column)');
       }
+    } else if (data.quotaExceeded || data.message === 'quota_exceeded') {
+      console.error('[/api/register] Apps Script quota exceeded');
+      return res.status(503).json({ success: false, quotaExceeded: true, message: 'quota_exceeded' });
     } else {
       console.error('[/api/register] Apps Script error:', JSON.stringify(data));
     }
@@ -145,7 +151,12 @@ app.post('/api/register', async (req, res) => {
     res.json(data);
   } catch (err) {
     console.error('[/api/register]', err.message);
-    res.status(500).json({ success: false, message: err.message });
+    const isQuota = /quota|limit exceeded/i.test(err.message);
+    res.status(isQuota ? 503 : 500).json({
+      success: false,
+      quotaExceeded: isQuota,
+      message: isQuota ? 'quota_exceeded' : err.message,
+    });
   }
 });
 
