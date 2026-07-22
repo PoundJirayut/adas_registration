@@ -40,7 +40,7 @@ function doPost(e) {
 
 // ── doGet ──────────────────────────────────────────────────────
 function doGet(e) {
-  const action = e.parameter.action;
+  const action = (e && e.parameter) ? e.parameter.action : undefined;
 
   if (action === 'register') {
     const result = registerPaper(
