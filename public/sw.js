@@ -1,4 +1,4 @@
-const CACHE = 'apsipa-v1';
+const CACHE = 'apsipa-v2';
 const SHELL  = ['/index.html', '/dashboard.html'];
 
 self.addEventListener('install', e => {

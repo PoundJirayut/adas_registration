@@ -18,7 +18,8 @@
       "Bash(curl -s -X POST http://localhost:3001/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"APSIPA2025\"}')",
       "Bash(lsof -ti:3001)",
       "Bash(xargs kill -9)",
-      "Bash(curl -s http://localhost:3001/api/export)"
+      "Bash(curl -s http://localhost:3001/api/export)",
+      "Bash(node -e ' *)"
     ]
   }
 }
