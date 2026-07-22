@@ -953,7 +953,7 @@ async function handleSearch() {
     }
     const hits = allRows.filter(r =>
       norm(r['Name']).includes(q) ||
-      norm(r['Peper-Title']).includes(q) ||
+      norm(r['Paper-Title']).includes(q) ||
       norm(r['Paper-ID']).includes(q)
     );
     renderResults(hits, q);
@@ -995,7 +995,7 @@ function renderResults(hits, query) {
       <span class="result-pid">${esc(row['Paper-ID'])}</span>
       <div class="result-info">
         <div class="result-name">${esc(row['Name'])}</div>
-        <div class="result-title">${esc(row['Peper-Title'])}</div>
+        <div class="result-title">${esc(row['Paper-Title'])}</div>
       </div>
       <span class="badge ${isReg ? 'badge-ok' : 'badge-open'}">
         <span class="badge-dot"></span>
@@ -1023,7 +1023,7 @@ function openDetail(row) {
 
   setText('dPaperId', row['Paper-ID']);
   setText('dName',    row['Name']);
-  setText('dTitle',   row['Peper-Title']);
+  setText('dTitle',   row['Paper-Title']);
 
   document.getElementById('dStatus').innerHTML = `<span class="badge ${isReg ? 'badge-ok':'badge-open'}">
     <span class="badge-dot"></span>${isReg ? 'Registered' : 'Not Registered'}</span>`;
@@ -1184,7 +1184,7 @@ async function submitRegistration() {
 function showSuccess(data) {
   setStep(4);
   setText('successName',  data.name  || selectedRow?.['Name'] || '');
-  setText('successTitle', data.title || selectedRow?.['Peper-Title'] || '');
+  setText('successTitle', data.title || selectedRow?.['Paper-Title'] || '');
   setText('successTs', `Registered at ${data.timestamp}`);
 
   const photoEl = document.getElementById('successPhoto');
