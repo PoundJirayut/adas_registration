@@ -196,7 +196,7 @@ function getColumns(headers) {
     title:       headers.indexOf('Peper-Title'),
     paperId:     headers.indexOf('Paper-ID'),
     status:      headers.indexOf('Status'),
-    lastChanged: headers.indexOf('Last_status_cheanged'),
+    lastChanged: headers.indexOf('Last_status_changed'),
     picture:     headers.indexOf('Picture'),
   };
 }
