@@ -82,9 +82,7 @@ app.post('/api/register', async (req, res) => {
 
     if (scriptResp.status === 302 || scriptResp.status === 301) {
       const redirectUrl = scriptResp.headers.location;
-      scriptResp = await axios.post(redirectUrl, payload, {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      scriptResp = await axios.get(redirectUrl);
     }
 
     const data = scriptResp.data;
