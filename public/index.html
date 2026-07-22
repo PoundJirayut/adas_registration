@@ -952,8 +952,8 @@ function openDetail(row) {
     <span class="badge-dot"></span>${isReg ? 'Registered' : 'Not Registered'}</span>`;
 
   const lastRow = document.getElementById('dLastRow');
-  if (row['Last_status_cheanged']) {
-    setText('dLast', row['Last_status_cheanged']);
+  if (row['Last_status_changed']) {
+    setText('dLast', row['Last_status_changed']);
     lastRow.classList.remove('hidden');
   } else {
     lastRow.classList.add('hidden');

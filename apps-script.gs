@@ -193,7 +193,7 @@ function getSheet() {
 function getColumns(headers) {
   return {
     name:        headers.indexOf('Name'),
-    title:       headers.indexOf('Peper-Title'),
+    title:       headers.indexOf('Paper-Title'),
     paperId:     headers.indexOf('Paper-ID'),
     status:      headers.indexOf('Status'),
     lastChanged: headers.indexOf('Last_status_changed'),
