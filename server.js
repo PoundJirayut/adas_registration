@@ -70,13 +70,24 @@ app.post('/api/register', async (req, res) => {
     }
 
     // Call Apps Script via POST with base64 image (works on localhost and production)
+    // maxRedirects:0 because Google redirects POST→GET (losing body); we follow manually.
     const payload = { action: 'register', paperId };
     if (imageBase64) payload.imageBase64 = imageBase64;
 
-    const resp = await axios.post(SCRIPT_URL, payload, {
+    let scriptResp = await axios.post(SCRIPT_URL, payload, {
       headers: { 'Content-Type': 'application/json' },
+      maxRedirects: 0,
+      validateStatus: s => s < 500,
     });
-    const data = resp.data;
+
+    if (scriptResp.status === 302 || scriptResp.status === 301) {
+      const redirectUrl = scriptResp.headers.location;
+      scriptResp = await axios.post(redirectUrl, payload, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const data = scriptResp.data;
 
     if (data.success) {
       if (data.driveUrl) {
