@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paper Registration — APSIPA Conference</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B1027">
 <style>
 /* ── Tokens ────────────────────────────────────────────────── */
 :root {
@@ -556,6 +558,50 @@ input{font-family:inherit}
 .mt     { margin-top:1rem; }
 .mt-sm  { margin-top:.5rem; }
 
+/* ── Success photo ─────────────────────────────────────── */
+.success-photo {
+  width:96px;height:96px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--ok);margin:0 auto 1.125rem;display:block;
+  box-shadow:0 0 0 5px var(--ok-bg);
+}
+
+/* ── PIN Modal ─────────────────────────────────────────── */
+.modal-overlay {
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;backdrop-filter:blur(2px);
+}
+.modal {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.5rem;width:min(360px,90vw);
+  box-shadow:var(--shadow-lg);
+}
+.modal-title{font-size:1rem;font-weight:800;margin-bottom:.375rem;}
+.modal-sub{font-size:.875rem;color:var(--text-2);margin-bottom:1rem;}
+.modal-input{
+  width:100%;padding:.75rem .875rem;font-size:1.125rem;
+  letter-spacing:.2em;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface-2);
+  color:var(--text-1);outline:none;margin-bottom:.75rem;
+  transition:border-color .15s,box-shadow .15s;
+}
+.modal-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,120,255,.15);}
+.modal-actions{display:flex;gap:.5rem;}
+.modal-actions .btn{flex:1;}
+.modal-err{font-size:.8rem;color:#ef4444;margin-bottom:.625rem;display:none;}
+.modal-err.show{display:block;}
+
+/* ── Offline banner ─────────────────────────────────────── */
+.offline-banner{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:var(--warn-bg);color:var(--warn-text);
+  border-bottom:1px solid var(--warn);
+  padding:.5rem 1rem;text-align:center;
+  font-size:.875rem;font-weight:600;
+  transform:translateY(-100%);transition:transform .3s ease;
+}
+.offline-banner.show{transform:translateY(0);}
+
 @media (max-width:480px) {
   .field { grid-template-columns:1fr;gap:.1rem; }
   .field-key { padding-top:0; }
@@ -568,6 +614,7 @@ input{font-family:inherit}
 </style>
 </head>
 <body>
+<div id="offlineBanner" class="offline-banner">You're offline — search uses cached data, registration unavailable</div>
 
 <!-- ── Site Header ───────────────────────────────────────── -->
 <header class="site-header">
@@ -575,6 +622,7 @@ input{font-family:inherit}
     <div class="hd-conf">APSIPA Conference</div>
     <h1 class="hd-title">Paper Registration</h1>
     <p class="hd-sub">Confirm your paper attendance by completing registration</p>
+    <a href="/dashboard.html" style="position:absolute;top:1rem;right:1rem;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.04em;padding:.375rem .75rem;border:1px solid rgba(255,255,255,.2);border-radius:var(--r-xs);transition:color .15s,border-color .15s" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.5)'" onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.2)'">Dashboard →</a>
 
     <nav class="steps" id="stepTrack" aria-label="Steps">
       <div class="step-item active" id="s1">
@@ -699,6 +747,9 @@ input{font-family:inherit}
         Take Photo &amp; Register
       </button>
     </div>
+    <div id="overrideRow" class="actions mt-sm hidden">
+      <button class="btn btn-ghost" style="color:var(--warn-text);border-color:var(--warn)" onclick="overrideRegistration()">Override Registration</button>
+    </div>
   </div>
 
   <!-- Camera -->
@@ -756,6 +807,7 @@ input{font-family:inherit}
   <!-- Success -->
   <div id="successCard" class="card hidden">
     <div class="success-wrap">
+      <img id="successPhoto" class="success-photo hidden" alt="Registration photo">
       <div class="success-ring-wrap">
         <svg viewBox="0 0 80 80">
           <circle class="success-ring-track" cx="40" cy="40" r="35"/>
@@ -775,12 +827,29 @@ input{font-family:inherit}
 
 </main>
 
+<!-- PIN Modal -->
+<div id="pinModal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title">Admin Override</div>
+    <div class="modal-sub">Enter admin PIN to override this registration</div>
+    <p id="pinErr" class="modal-err">Incorrect PIN — try again</p>
+    <input id="pinInput" class="modal-input" type="password" placeholder="PIN" maxlength="32" autocomplete="off"
+      onkeydown="if(event.key==='Enter')submitPin()">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePinModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPin()">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── State ──────────────────────────────────────────────────────
 let allRows     = null;
 let selectedRow = null;
 let camStream   = null;
-let capturedB64 = null;
+let capturedB64  = null;
+let isForceMode  = false;
+let adminPinUsed = '';
 
 // ── Transition helpers ─────────────────────────────────────────
 const CARD_EXIT_MS = 180;
@@ -845,11 +914,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Data ───────────────────────────────────────────────────────
 async function preloadData() {
+  const cached = localStorage.getItem('apsipa_rows');
+  if (cached) try { allRows = JSON.parse(cached); } catch (e) {}
+
+  if (!navigator.onLine) { hide('loadHint'); return; }
+
   show('loadHint');
   try {
     const res  = await fetch('/api/data');
     const json = await res.json();
-    if (json.success) allRows = json.data;
+    if (json.success) {
+      allRows = json.data;
+      localStorage.setItem('apsipa_rows', JSON.stringify(json.data));
+    }
   } catch (e) {
     console.warn('Preload failed:', e.message);
   } finally {
@@ -968,8 +1045,11 @@ function openDetail(row) {
     ? 'Already Registered'
     : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/></svg> Take Photo &amp; Register`;
 
+  document.getElementById('overrideRow').classList.toggle('hidden', !isReg);
+
   transitTo(['resultsCard'], 'detailCard');
   setStep(2);
+  refreshStatusSilently();
 }
 
 function closeDetail() {
@@ -1043,6 +1123,7 @@ function retakePhoto() {
 function cancelCamera() {
   stopStream();
   capturedB64 = null;
+  isForceMode = false; adminPinUsed = '';
   if (selectedRow) {
     transitTo(['cameraCard'], 'detailCard');
     setStep(2);
@@ -1063,20 +1144,24 @@ async function submitRegistration() {
   btn.disabled = true; btn.textContent = 'Saving…';
 
   try {
+    const payload = { paperId: selectedRow['Paper-ID'], imageBase64: capturedB64 };
+    if (isForceMode) { payload.force = true; payload.adminPin = adminPinUsed; }
     const res  = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paperId: selectedRow['Paper-ID'], imageBase64: capturedB64 }),
+      body: JSON.stringify(payload),
     });
     const data = await res.json();
 
     if (data.success) {
+      isForceMode = false; adminPinUsed = '';
       if (allRows) {
         const idx = allRows.findIndex(r => r['Paper-ID'] === selectedRow['Paper-ID']);
         if (idx !== -1) {
-          allRows[idx]['Status']               = 'Registed';
-          allRows[idx]['Last_status_cheanged'] = data.timestamp;
+          allRows[idx]['Status']              = 'Registed';
+          allRows[idx]['Last_status_changed'] = data.timestamp;
         }
+        localStorage.setItem('apsipa_rows', JSON.stringify(allRows));
       }
       hide('cameraCard');
       showSuccess(data);
@@ -1102,6 +1187,14 @@ function showSuccess(data) {
   setText('successTitle', data.title || selectedRow?.['Peper-Title'] || '');
   setText('successTs', `Registered at ${data.timestamp}`);
 
+  const photoEl = document.getElementById('successPhoto');
+  if (capturedB64) {
+    photoEl.src = 'data:image/jpeg;base64,' + capturedB64;
+    photoEl.classList.remove('hidden');
+  } else {
+    photoEl.classList.add('hidden');
+  }
+
   transitTo(['cameraCard'], 'successCard');
 
   setTimeout(() => {
@@ -1113,6 +1206,7 @@ function showSuccess(data) {
 function resetAll() {
   document.getElementById('searchInput').value = '';
   selectedRow = null;
+  isForceMode = false; adminPinUsed = '';
   setStep(1);
   exitCard('successCard', () => {
     document.getElementById('successRing').classList.remove('draw');
@@ -1135,6 +1229,93 @@ function setText(id, v) { document.getElementById(id).textContent = v ?? '—'; 
 function esc(s) {
   return String(s ?? '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Override / PIN ─────────────────────────────────────────────
+function overrideRegistration() {
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinErr').classList.remove('show');
+  show('pinModal');
+  setTimeout(() => document.getElementById('pinInput').focus(), 60);
+}
+
+function closePinModal() {
+  hide('pinModal');
+}
+
+async function submitPin() {
+  const pin   = document.getElementById('pinInput').value.trim();
+  const errEl = document.getElementById('pinErr');
+  if (!pin) return;
+
+  try {
+    const res  = await fetch('/api/validate-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin }),
+    });
+    const data = await res.json();
+    if (data.valid) {
+      isForceMode  = true;
+      adminPinUsed = pin;
+      closePinModal();
+      openCamera();
+    } else {
+      errEl.textContent = 'Incorrect PIN — try again';
+      errEl.classList.add('show');
+    }
+  } catch (err) {
+    errEl.textContent = 'Server error — try again';
+    errEl.classList.add('show');
+  }
+}
+
+// ── Background status refresh (feature 8) ─────────────────────
+async function refreshStatusSilently() {
+  if (!selectedRow || !navigator.onLine) return;
+  try {
+    const res  = await fetch('/api/data');
+    const json = await res.json();
+    if (!json.success || !selectedRow) return;
+    allRows = json.data;
+    localStorage.setItem('apsipa_rows', JSON.stringify(json.data));
+
+    const fresh = allRows.find(r => r['Paper-ID'] === selectedRow['Paper-ID']);
+    if (!fresh || fresh['Status'] === selectedRow['Status']) return;
+
+    selectedRow = fresh;
+    const isReg = fresh['Status'] === 'Registed';
+    document.getElementById('noticeRegistered').classList.toggle('hidden', !isReg);
+    document.getElementById('noticeReady').classList.toggle('hidden', isReg);
+    document.getElementById('overrideRow').classList.toggle('hidden', !isReg);
+
+    const confirmBtn = document.getElementById('confirmBtn');
+    confirmBtn.disabled = isReg;
+    confirmBtn.innerHTML = isReg
+      ? 'Already Registered'
+      : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5.5 2h4l1 2H14v9H1V4h3.5L5.5 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="8.5" r="2.25" stroke="currentColor" stroke-width="1.4"/></svg> Take Photo &amp; Register`;
+
+    document.getElementById('dStatus').innerHTML =
+      `<span class="badge ${isReg ? 'badge-ok':'badge-open'}"><span class="badge-dot"></span>${isReg ? 'Registered' : 'Not Registered'}</span>`;
+
+    if (fresh['Last_status_changed']) {
+      setText('dLast', fresh['Last_status_changed']);
+      document.getElementById('dLastRow').classList.remove('hidden');
+    }
+  } catch (e) { /* silently ignore */ }
+}
+
+// ── Offline detection ──────────────────────────────────────────
+function syncOnlineState() {
+  document.getElementById('offlineBanner').classList.toggle('show', !navigator.onLine);
+}
+window.addEventListener('online',  syncOnlineState);
+window.addEventListener('offline', syncOnlineState);
+syncOnlineState();
+
+// ── Service Worker ─────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 </script>
 </body>

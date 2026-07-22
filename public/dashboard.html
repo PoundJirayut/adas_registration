@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — APSIPA Registration</title>
+<style>
+:root {
+  --hd:#0B1027;--bg:#F0F4FF;--surface:#FFF;--surface-2:#F5F7FF;--border:#D8E0F4;
+  --text-1:#0B1027;--text-2:#2A3A6A;--text-3:#5C6E9A;
+  --accent:#2B4EFF;--accent-dim:#EEF1FF;--accent-hi:#1A3AE0;
+  --ok:#059669;--ok-bg:#ECFDF5;--ok-text:#065F46;
+  --warn:#D97706;--warn-bg:#FFFBEB;--warn-text:#92400E;
+  --shadow-sm:0 1px 3px rgba(11,16,39,.07);
+  --shadow-md:0 4px 16px rgba(11,16,39,.1),0 1px 3px rgba(11,16,39,.05);
+  --r:14px;--r-sm:9px;--r-xs:5px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#070D1E;--surface:#0F1629;--surface-2:#172038;
+    --border:#1E2D50;--text-1:#E6ECFF;--text-2:#9EB5E0;--text-3:#6685B8;
+    --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;
+    --ok:#34D399;--ok-bg:#022C22;--ok-text:#34D399;
+    --warn:#FCD34D;--warn-bg:#1C1000;--warn-text:#FCD34D;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.3);
+    --shadow-md:0 4px 16px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.2);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070D1E;--surface:#0F1629;--surface-2:#172038;--border:#1E2D50;
+  --text-1:#E6ECFF;--text-2:#9EB5E0;--text-3:#6685B8;
+  --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;
+  --ok:#34D399;--ok-bg:#022C22;--ok-text:#34D399;
+  --warn:#FCD34D;--warn-bg:#1C1000;--warn-text:#FCD34D;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px;line-height:1.6;
+  background:var(--bg);color:var(--text-1);min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer}
+
+/* Header */
+.site-header {
+  background:var(--hd);
+  background-image:
+    linear-gradient(rgba(43,78,255,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(43,78,255,.07) 1px,transparent 1px);
+  background-size:36px 36px;
+  padding:2rem 1.5rem;
+  position:relative;
+}
+.site-header::after {
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,120,255,.4),transparent);
+}
+.hd-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.hd-left .hd-conf{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(91,120,255,.95);margin-bottom:.25rem;}
+.hd-left .hd-title{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.375rem;
+  padding:.65rem 1.125rem;font-size:.9rem;font-weight:600;
+  border:none;border-radius:var(--r-sm);
+  transition:background .15s,transform .1s;white-space:nowrap;line-height:1;cursor:pointer;
+}
+.btn:active{transform:scale(.97);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.25);}
+.btn-ghost:hover{border-color:rgba(255,255,255,.6);color:#fff;}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(43,78,255,.3);}
+.btn-primary:hover{background:var(--accent-hi);}
+.btn-ok{background:var(--ok);color:#fff;}
+.btn-ok:hover{filter:brightness(1.08);}
+
+/* Main */
+.main{max-width:900px;margin:0 auto;padding:1.75rem 1rem 4rem;}
+.section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:.875rem;}
+
+/* Stat tiles */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.875rem;margin-bottom:1.5rem;}
+.stat-tile{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);box-shadow:var(--shadow-sm);
+  padding:1.25rem 1.375rem;
+}
+.stat-label{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);margin-bottom:.25rem;}
+.stat-val{font-size:2rem;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--text-1);}
+.stat-val.ok{color:var(--ok);}
+.stat-val.accent{color:var(--accent);}
+.stat-val.warn{color:var(--warn);}
+.stat-sub{font-size:.8rem;color:var(--text-3);margin-top:.25rem;}
+
+/* Progress bar */
+.prog-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:1.25rem 1.375rem;margin-bottom:1.5rem;}
+.prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;}
+.prog-track{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden;border:1px solid var(--border);}
+.prog-fill{height:100%;background:var(--ok);border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1);}
+
+/* Chart */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:1.25rem 1.375rem;margin-bottom:1.5rem;overflow:hidden;}
+.chart-wrap{overflow-x:auto;}
+.chart-svg{display:block;}
+.chart-bar{fill:var(--accent);opacity:.8;transition:opacity .15s;}
+.chart-bar:hover{opacity:1;}
+.chart-label{fill:var(--text-3);font-size:10px;font-family:ui-sans-serif,system-ui,sans-serif;}
+.chart-count{fill:var(--text-2);font-size:10px;font-family:ui-sans-serif,system-ui,sans-serif;}
+.chart-empty{text-align:center;padding:2rem;color:var(--text-3);font-size:.9rem;}
+
+/* Table */
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);margin-bottom:1.5rem;overflow:hidden;}
+.table-hd{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.875rem;}
+th{
+  text-align:left;padding:.625rem 1rem;
+  font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--text-2);background:var(--surface-2);
+  border-bottom:1px solid var(--border);white-space:nowrap;
+}
+td{
+  padding:.625rem 1rem;border-bottom:1px solid var(--border);
+  color:var(--text-1);vertical-align:middle;
+}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface-2);}
+.mono{font-family:'SF Mono','Cascadia Code',monospace;font-size:.8rem;color:var(--accent);}
+.badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.6875rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:.2rem .55rem;border-radius:99px;
+}
+.badge-ok{background:var(--ok-bg);color:var(--ok-text);}
+.badge-open{background:var(--accent-dim);color:var(--accent);}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* Refresh */
+.refresh-row{display:flex;align-items:center;justify-content:flex-end;gap:.5rem;margin-bottom:.875rem;}
+.refresh-ts{font-size:.8rem;color:var(--text-3);}
+
+/* Loading */
+.spinner-wrap{text-align:center;padding:3rem 1rem;color:var(--text-3);}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:.75rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.hidden{display:none!important;}
+@media(max-width:600px){
+  .hd-inner{flex-direction:column;align-items:flex-start;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="hd-inner">
+    <div class="hd-left">
+      <div class="hd-conf">APSIPA Conference</div>
+      <div class="hd-title">Registration Dashboard</div>
+    </div>
+    <div style="display:flex;gap:.625rem;flex-wrap:wrap;">
+      <button class="btn btn-ok" onclick="exportCSV()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Export CSV
+      </button>
+      <a href="/" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M8 2L2 7l6 5M2 7h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Registration
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div id="loadingState" class="spinner-wrap">
+    <div class="spin"></div>
+    <div>Loading data…</div>
+  </div>
+
+  <div id="content" class="hidden">
+
+    <!-- Refresh row -->
+    <div class="refresh-row">
+      <span id="refreshTs" class="refresh-ts"></span>
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:.4rem .75rem" onclick="loadData()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5a4.5 4.5 0 0 1 3.18 1.32M10.5 1.5v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Progress bar -->
+    <div class="prog-card">
+      <div class="prog-header">
+        <span class="section-title" style="margin:0">Registration Progress</span>
+        <span id="progPct" style="font-size:.875rem;font-weight:700;color:var(--ok)"></span>
+      </div>
+      <div class="prog-track"><div id="progFill" class="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Hourly chart -->
+    <div class="chart-card">
+      <div class="section-title">Registrations by Hour</div>
+      <div id="chartWrap" class="chart-wrap"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-hd">
+        <div class="section-title" style="margin:0">All Papers</div>
+        <div id="tableCount" style="font-size:.875rem;font-weight:600;color:var(--text-2)"></div>
+      </div>
+      <div class="table-wrap">
+        <table id="paperTable">
+          <thead>
+            <tr>
+              <th>Paper ID</th>
+              <th>Author</th>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Registered At</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+let allRows = [];
+
+async function loadData() {
+  try {
+    const res  = await fetch('/api/data');
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message);
+    allRows = json.data;
+    render();
+  } catch (err) {
+    document.getElementById('loadingState').innerHTML =
+      `<div style="color:#ef4444">Failed to load: ${esc(err.message)}</div>`;
+  }
+}
+
+function render() {
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('content').classList.remove('hidden');
+
+  const total = allRows.length;
+  const regRows = allRows.filter(r => r['Status'] === 'Registed');
+  const registered = regRows.length;
+  const pending = total - registered;
+  const pct = total ? Math.round(registered / total * 100) : 0;
+
+  // Stats
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-tile">
+      <div class="stat-label">Total Papers</div>
+      <div class="stat-val accent">${total}</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Registered</div>
+      <div class="stat-val ok">${registered}</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Pending</div>
+      <div class="stat-val warn">${pending}</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Completion</div>
+      <div class="stat-val${pct === 100 ? ' ok' : ''}">${pct}%</div>
+      <div class="stat-sub">${registered} of ${total}</div>
+    </div>
+  `;
+
+  // Progress bar
+  document.getElementById('progPct').textContent = pct + '%';
+  setTimeout(() => { document.getElementById('progFill').style.width = pct + '%'; }, 50);
+
+  // Chart
+  renderChart(regRows);
+
+  // Table
+  renderTable();
+
+  // Refresh timestamp
+  const now = new Date();
+  document.getElementById('refreshTs').textContent =
+    `Last updated: ${now.toLocaleTimeString()}`;
+}
+
+function parseTs(ts) {
+  if (!ts) return null;
+  // dd/MM/yyyy HH:mm:ss
+  const m = String(ts).match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/);
+  if (!m) return null;
+  return new Date(+m[3], +m[2]-1, +m[1], +m[4], +m[5], +m[6]);
+}
+
+function renderChart(regRows) {
+  const counts = {};
+  regRows.forEach(r => {
+    const d = parseTs(r['Last_status_changed']);
+    if (!d) return;
+    const key = d.getHours().toString().padStart(2,'0') + ':00';
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  const keys = Object.keys(counts).sort();
+  if (!keys.length) {
+    document.getElementById('chartWrap').innerHTML =
+      '<div class="chart-empty">No registrations recorded yet</div>';
+    return;
+  }
+
+  const maxVal = Math.max(...Object.values(counts));
+  const barW = 36, gap = 10, padL = 32, padR = 12, padT = 12, padB = 36;
+  const chartH = 120;
+  const svgW = Math.max(keys.length * (barW + gap) + padL + padR, 300);
+  const svgH = chartH + padT + padB;
+
+  let bars = '';
+  keys.forEach((k, i) => {
+    const x = padL + i * (barW + gap);
+    const h = maxVal ? Math.round((counts[k] / maxVal) * chartH) : 0;
+    const y = padT + chartH - h;
+    bars += `
+      <rect class="chart-bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="4"/>
+      <text class="chart-label" x="${x + barW/2}" y="${svgH - padB + 14}" text-anchor="middle">${k}</text>
+      <text class="chart-count" x="${x + barW/2}" y="${y - 4}" text-anchor="middle">${counts[k]}</text>
+    `;
+  });
+
+  document.getElementById('chartWrap').innerHTML = `
+    <svg class="chart-svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
+      ${bars}
+    </svg>
+  `;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  document.getElementById('tableCount').textContent =
+    `${allRows.length} papers`;
+
+  tbody.innerHTML = allRows.map(r => {
+    const isReg = r['Status'] === 'Registed';
+    return `<tr>
+      <td class="mono">${esc(r['Paper-ID'])}</td>
+      <td>${esc(r['Name'])}</td>
+      <td style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r['Peper-Title'] || r['Paper-Title'] || '')}</td>
+      <td><span class="badge ${isReg ? 'badge-ok' : 'badge-open'}"><span class="badge-dot"></span>${isReg ? 'Registered' : 'Pending'}</span></td>
+      <td class="mono" style="font-size:.75rem">${esc(r['Last_status_changed'] || '—')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function exportCSV() {
+  window.location.href = '/api/export';
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadData();
+</script>
+</body>
+</html>

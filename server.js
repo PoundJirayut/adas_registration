@@ -8,9 +8,10 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const SHEET_ID   = process.env.SHEET_ID  || '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
+const SHEET_ID   = process.env.SHEET_ID   || '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
 const SCRIPT_URL = process.env.SCRIPT_URL || '';
 const PORT       = process.env.PORT       || 3000;
+const ADMIN_PIN  = process.env.ADMIN_PIN  || 'APSIPA2025';
 const BASE_URL   = process.env.BASE_URL
   || (process.env.RAILWAY_PUBLIC_DOMAIN
       ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
@@ -49,15 +50,57 @@ app.get('/api/data', async (req, res) => {
   }
 });
 
+// ── POST /api/validate-pin ─────────────────────────────────────
+app.post('/api/validate-pin', (req, res) => {
+  const { pin } = req.body;
+  res.json({ valid: pin === ADMIN_PIN });
+});
+
+// ── GET /api/export ────────────────────────────────────────────
+app.get('/api/export', async (req, res) => {
+  try {
+    const url  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const resp = await axios.get(url, { responseType: 'text' });
+    const text = resp.data;
+    const json = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1));
+    const { cols, rows } = json.table;
+
+    let headers  = cols.map(c => c.label);
+    let startRow = 0;
+    if (headers.every(h => !h) && rows?.length) {
+      headers  = (rows[0].c || []).map(cell => cell?.v ?? '');
+      startRow = 1;
+    }
+
+    const dataRows = (rows || []).slice(startRow).map(row =>
+      (row.c || []).map(cell => String(cell?.v ?? ''))
+    );
+
+    const csvLines = [headers, ...dataRows].map(row =>
+      row.map(v => `"${v.replace(/"/g, '""')}"`).join(',')
+    );
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="apsipa_registration.csv"');
+    res.send('﻿' + csvLines.join('\r\n'));
+  } catch (err) {
+    console.error('[/api/export]', err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // ── POST /api/register ─────────────────────────────────────────
 app.post('/api/register', async (req, res) => {
-  const { paperId, imageBase64 } = req.body;
+  const { paperId, imageBase64, force, adminPin } = req.body;
 
   if (!paperId) {
     return res.status(400).json({ success: false, message: 'paperId is required' });
   }
   if (!SCRIPT_URL) {
     return res.status(500).json({ success: false, message: 'SCRIPT_URL not configured in .env' });
+  }
+  if (force && adminPin !== ADMIN_PIN) {
+    return res.status(403).json({ success: false, message: 'Invalid admin PIN' });
   }
 
   try {
@@ -74,6 +117,7 @@ app.post('/api/register', async (req, res) => {
     const payload = { action: 'register', paperId };
     if (imageBase64) payload.imageBase64 = imageBase64;
     if (imageUrl)    payload.imageUrl    = imageUrl;
+    if (force)       payload.force       = true;
 
     let scriptResp = await axios.post(SCRIPT_URL, payload, {
       headers: { 'Content-Type': 'application/json' },

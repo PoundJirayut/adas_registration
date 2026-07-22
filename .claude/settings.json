@@ -11,7 +11,14 @@
       "Bash(node /Users/jirayut/Documents/Inetms_pre_work/adas_registration/server.js)",
       "Bash(curl -s -X POST http://localhost:3001/api/register -H 'Content-Type: application/json' -d '{\"paperId\":\"Test02\",\"imageBase64\":\"__TRACKED_VAR__\"}')",
       "Skill(artifact-design)",
-      "Skill(artifact-design:*)"
+      "Skill(artifact-design:*)",
+      "Bash(node -e \"require\\('./server.js'\\)\")",
+      "Bash(curl -s http://localhost:3000/api/data)",
+      "Bash(kill %1)",
+      "Bash(curl -s -X POST http://localhost:3001/api/validate-pin -H 'Content-Type: application/json' -d '{\"pin\":\"APSIPA2025\"}')",
+      "Bash(lsof -ti:3001)",
+      "Bash(xargs kill -9)",
+      "Bash(curl -s http://localhost:3001/api/export)"
     ]
   }
 }

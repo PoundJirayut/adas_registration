@@ -27,7 +27,8 @@ function doPost(e) {
       const result = registerPaper(
         body.paperId,
         body.imageBase64 || '',
-        body.imageUrl    || ''
+        body.imageUrl    || '',
+        body.force       || false
       );
       return respond(result);
     }
@@ -68,7 +69,7 @@ function doGet(e) {
 }
 
 // ── registerPaper ──────────────────────────────────────────────
-function registerPaper(paperId, imageBase64, imageUrl) {
+function registerPaper(paperId, imageBase64, imageUrl, force) {
   if (!paperId) return { success: false, message: 'paperId is required' };
 
   const lock = LockService.getScriptLock();
@@ -86,7 +87,7 @@ function registerPaper(paperId, imageBase64, imageUrl) {
       const rowId = String(data[i][col.paperId]).trim();
       if (rowId !== String(paperId).trim()) continue;
 
-      if (data[i][col.status] === 'Registed') {
+      if (data[i][col.status] === 'Registed' && !force) {
         return { success: false, alreadyRegistered: true, message: 'Already registered' };
       }
 
