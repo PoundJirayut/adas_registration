@@ -71,6 +71,13 @@ function doGet(e) {
 function registerPaper(paperId, imageBase64, imageUrl) {
   if (!paperId) return { success: false, message: 'paperId is required' };
 
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+  } catch (e) {
+    return { success: false, message: 'Server busy, please try again' };
+  }
+
   try {
     const { sheet, data, headers } = getSheet();
     const col = getColumns(headers);
@@ -84,8 +91,7 @@ function registerPaper(paperId, imageBase64, imageUrl) {
       }
 
       const timestamp = now();
-      sheet.getRange(i + 1, col.status + 1).setValue('Registed');
-      sheet.getRange(i + 1, col.lastChanged + 1).setValue(timestamp);
+      sheet.getRange(i + 1, col.status + 1, 1, 2).setValues([['Registed', timestamp]]);
 
       // Upload photo to Google Drive
       let driveUrl   = '';
@@ -123,6 +129,8 @@ function registerPaper(paperId, imageBase64, imageUrl) {
     return { success: false, message: 'Paper ID not found: ' + paperId };
   } catch (err) {
     return { success: false, message: 'Server error: ' + err.message };
+  } finally {
+    lock.releaseLock();
   }
 }
 
