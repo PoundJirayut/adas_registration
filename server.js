@@ -73,6 +73,7 @@ app.post('/api/register', async (req, res) => {
     // maxRedirects:0 because Google redirects POST→GET (losing body); we follow manually.
     const payload = { action: 'register', paperId };
     if (imageBase64) payload.imageBase64 = imageBase64;
+    if (imageUrl)    payload.imageUrl    = imageUrl;
 
     let scriptResp = await axios.post(SCRIPT_URL, payload, {
       headers: { 'Content-Type': 'application/json' },
@@ -91,8 +92,10 @@ app.post('/api/register', async (req, res) => {
       if (data.driveUrl) {
         console.log('[/api/register] Drive upload OK:', data.driveUrl);
       } else {
-        console.warn('[/api/register] Drive upload failed:', data.driveError || 'no error info');
+        console.warn('[/api/register] Drive upload failed:', data.driveError || '(no driveError returned — check Picture column name in sheet)');
       }
+    } else {
+      console.error('[/api/register] Apps Script error:', JSON.stringify(data));
     }
 
     res.json(data);

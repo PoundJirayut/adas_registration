@@ -90,11 +90,15 @@ function registerPaper(paperId, imageBase64, imageUrl) {
       // Upload photo to Google Drive
       let driveUrl   = '';
       let driveError = '';
-      if (col.picture !== -1) {
-        let result = { error: 'no image provided' };
+      if (col.picture === -1) {
+        driveError = 'Picture column not found in sheet (expected column named "Picture")';
+      } else if (!imageBase64 && !imageUrl) {
+        driveError = 'no image provided';
+      } else {
+        let result;
         if (imageBase64) {
           result = uploadToDriveBase64(paperId, imageBase64);
-        } else if (imageUrl) {
+        } else {
           result = uploadToDriveUrl(paperId, imageUrl);
         }
         if (result.url) {
