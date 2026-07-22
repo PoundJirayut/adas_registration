@@ -17,6 +17,27 @@
 const SHEET_ID     = '19TspRNs1fkeY89CP-lJW8sdXaTCSGUeD8wh8FPpKoww';
 const DRIVE_FOLDER = 'APSIPA_Registration_Photos';
 
+// ── doPost ─────────────────────────────────────────────────────
+function doPost(e) {
+  try {
+    const body   = JSON.parse(e.postData.contents);
+    const action = body.action;
+
+    if (action === 'register') {
+      const result = registerPaper(
+        body.paperId,
+        body.imageBase64 || '',
+        body.imageUrl    || ''
+      );
+      return respond(result);
+    }
+
+    return respond({ status: 'ok', message: 'APSIPA Registration API' });
+  } catch (err) {
+    return respond({ success: false, message: 'doPost error: ' + err.message });
+  }
+}
+
 // ── doGet ──────────────────────────────────────────────────────
 function doGet(e) {
   const action = e.parameter.action;
@@ -24,6 +45,7 @@ function doGet(e) {
   if (action === 'register') {
     const result = registerPaper(
       e.parameter.paperId,
+      '',
       e.parameter.imageUrl || ''
     );
     return respond(result);
@@ -46,7 +68,7 @@ function doGet(e) {
 }
 
 // ── registerPaper ──────────────────────────────────────────────
-function registerPaper(paperId, imageUrl) {
+function registerPaper(paperId, imageBase64, imageUrl) {
   if (!paperId) return { success: false, message: 'paperId is required' };
 
   try {
@@ -65,11 +87,16 @@ function registerPaper(paperId, imageUrl) {
       sheet.getRange(i + 1, col.status + 1).setValue('Registed');
       sheet.getRange(i + 1, col.lastChanged + 1).setValue(timestamp);
 
-      // Upload photo to Google Drive (only if imageUrl is provided and publicly accessible)
+      // Upload photo to Google Drive
       let driveUrl   = '';
       let driveError = '';
-      if (imageUrl && col.picture !== -1) {
-        const result = uploadToDrive(paperId, imageUrl);
+      if (col.picture !== -1) {
+        let result = { error: 'no image provided' };
+        if (imageBase64) {
+          result = uploadToDriveBase64(paperId, imageBase64);
+        } else if (imageUrl) {
+          result = uploadToDriveUrl(paperId, imageUrl);
+        }
         if (result.url) {
           driveUrl = result.url;
           sheet.getRange(i + 1, col.picture + 1).setValue(driveUrl);
@@ -95,10 +122,27 @@ function registerPaper(paperId, imageUrl) {
   }
 }
 
-// ── uploadToDrive ──────────────────────────────────────────────
+// ── uploadToDriveBase64 ────────────────────────────────────────
+// Decodes base64 image and saves directly to Google Drive.
+// Works from any server including localhost.
+function uploadToDriveBase64(paperId, imageBase64) {
+  try {
+    const bytes  = Utilities.base64Decode(imageBase64);
+    const blob   = Utilities.newBlob(bytes, 'image/jpeg', paperId + '_' + Date.now() + '.jpg');
+    const folder = getOrCreateFolder();
+    const file   = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    return { url: 'https://drive.google.com/file/d/' + file.getId() + '/view' };
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+// ── uploadToDriveUrl ───────────────────────────────────────────
 // Fetches the photo from a public URL and saves it to Google Drive.
 // Requires the server to be publicly accessible (Railway, not localhost).
-function uploadToDrive(paperId, sourceUrl) {
+function uploadToDriveUrl(paperId, sourceUrl) {
   try {
     const response = UrlFetchApp.fetch(sourceUrl, {
       muteHttpExceptions: true,

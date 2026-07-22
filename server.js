@@ -69,20 +69,18 @@ app.post('/api/register', async (req, res) => {
       imageUrl = `${BASE_URL}/uploads/${filename}`;
     }
 
-    // Call Apps Script via GET — pass imageUrl only if server is publicly accessible
-    // (Apps Script cannot reach localhost, so Drive upload is skipped when running locally)
-    const params = new URLSearchParams({ action: 'register', paperId });
-    if (imageUrl && !isLocalhost) params.set('imageUrl', imageUrl);
+    // Call Apps Script via POST with base64 image (works on localhost and production)
+    const payload = { action: 'register', paperId };
+    if (imageBase64) payload.imageBase64 = imageBase64;
 
-    const resp = await axios.get(`${SCRIPT_URL}?${params}`);
+    const resp = await axios.post(SCRIPT_URL, payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     const data = resp.data;
 
     if (data.success) {
       if (data.driveUrl) {
         console.log('[/api/register] Drive upload OK:', data.driveUrl);
-      } else if (isLocalhost) {
-        console.log('[/api/register] Local mode — Drive upload skipped. Photo saved to:', imageUrl);
-        data.driveSkipped = true;
       } else {
         console.warn('[/api/register] Drive upload failed:', data.driveError || 'no error info');
       }
@@ -98,10 +96,7 @@ app.post('/api/register', async (req, res) => {
 // ── Start ──────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n  APSIPA Registration  →  http://localhost:${PORT}`);
-  if (isLocalhost) {
-    console.log('  ⚠  Running locally — Drive upload will be skipped.');
-    console.log('     To enable Drive upload: deploy to Railway or use ngrok.\n');
-  } else {
+  if (!isLocalhost) {
     console.log(`  Public URL: ${BASE_URL}\n`);
   }
   if (!SCRIPT_URL) {
