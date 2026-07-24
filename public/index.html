@@ -20,6 +20,7 @@
   --accent:      #2B4EFF;
   --accent-dim:  #EEF1FF;
   --accent-hi:   #1A3AE0;
+  --accent-bd:   rgba(43,78,255,.22);
   --ok:          #059669;
   --ok-bg:       #ECFDF5;
   --ok-text:     #065F46;
@@ -38,7 +39,7 @@
     --hd:#0B1027;
     --bg:#070D1E; --surface:#0F1629; --surface-2:#172038;
     --border:#1E2D50; --text-1:#E6ECFF; --text-2:#9EB5E0; --text-3:#6685B8;
-    --accent:#5B78FF; --accent-dim:#0D1640; --accent-hi:#4060EE;
+    --accent:#5B78FF; --accent-dim:#0D1640; --accent-hi:#4060EE; --accent-bd:rgba(91,120,255,.32);
     --ok:#34D399; --ok-bg:#022C22; --ok-text:#34D399;
     --warn:#FCD34D; --warn-bg:#1C1000; --warn-text:#FCD34D;
     --shadow-sm:0 1px 3px rgba(0,0,0,.3);
@@ -49,7 +50,7 @@
 :root[data-theme="light"]{
   --hd:#0B1027;--bg:#F0F4FF;--surface:#FFF;--surface-2:#F5F7FF;--border:#D8E0F4;
   --text-1:#0B1027;--text-2:#2A3A6A;--text-3:#5C6E9A;
-  --accent:#2B4EFF;--accent-dim:#EEF1FF;--accent-hi:#1A3AE0;
+  --accent:#2B4EFF;--accent-dim:#EEF1FF;--accent-hi:#1A3AE0;--accent-bd:rgba(43,78,255,.22);
   --ok:#059669;--ok-bg:#ECFDF5;--ok-text:#065F46;
   --warn:#D97706;--warn-bg:#FFFBEB;--warn-text:#92400E;
   --shadow-sm:0 1px 3px rgba(11,16,39,.07);
@@ -59,7 +60,7 @@
 :root[data-theme="dark"]{
   --hd:#0B1027;--bg:#070D1E;--surface:#0F1629;--surface-2:#172038;
   --border:#1E2D50;--text-1:#E6ECFF;--text-2:#9EB5E0;--text-3:#6685B8;
-  --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;
+  --accent:#5B78FF;--accent-dim:#0D1640;--accent-hi:#4060EE;--accent-bd:rgba(91,120,255,.32);
   --ok:#34D399;--ok-bg:#022C22;--ok-text:#34D399;
   --warn:#FCD34D;--warn-bg:#1C1000;--warn-text:#FCD34D;
   --shadow-sm:0 1px 3px rgba(0,0,0,.3);
@@ -423,7 +424,7 @@ input{font-family:inherit}
 }
 .notice-icon { flex-shrink:0; }
 .notice-warn { background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn); }
-.notice-info { background:var(--accent-dim);color:var(--accent-hi);border:1px solid rgba(43,78,255,.3); }
+.notice-info { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-bd); }
 
 /* ── Actions row ───────────────────────────────────────────── */
 .actions { display:flex;gap:.625rem; }
@@ -602,6 +603,14 @@ input{font-family:inherit}
 }
 .offline-banner.show{transform:translateY(0);}
 
+/* Smooth transition only when user manually switches theme */
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color .25s ease, color .25s ease,
+              border-color .25s ease, box-shadow .25s ease !important;
+}
+
 @media (max-width:480px) {
   .field { grid-template-columns:1fr;gap:.1rem; }
   .field-key { padding-top:0; }
@@ -622,7 +631,10 @@ input{font-family:inherit}
     <div class="hd-conf">APSIPA Conference</div>
     <h1 class="hd-title">Paper Registration</h1>
     <p class="hd-sub">Confirm your paper attendance by completing registration</p>
-    <a href="/dashboard.html" style="position:absolute;top:1rem;right:1rem;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.04em;padding:.375rem .75rem;border:1px solid rgba(255,255,255,.2);border-radius:var(--r-xs);transition:color .15s,border-color .15s" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.5)'" onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.2)'">Dashboard →</a>
+    <div style="position:absolute;top:1rem;right:1rem;display:flex;gap:.5rem;align-items:center;">
+      <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle colour theme" style="font-size:.85rem;background:none;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.2);border-radius:var(--r-xs);padding:.3rem .55rem;cursor:pointer;line-height:1;transition:color .15s,border-color .15s" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.5)'" onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.2)'"></button>
+      <a href="/dashboard.html" style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.04em;padding:.375rem .75rem;border:1px solid rgba(255,255,255,.2);border-radius:var(--r-xs);transition:color .15s,border-color .15s" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.5)'" onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.2)'">Dashboard →</a>
+    </div>
 
     <nav class="steps" id="stepTrack" aria-label="Steps">
       <div class="step-item active" id="s1">
@@ -1342,6 +1354,31 @@ function syncOnlineState() {
 window.addEventListener('online',  syncOnlineState);
 window.addEventListener('offline', syncOnlineState);
 syncOnlineState();
+
+// ── Theme toggle ───────────────────────────────────────────────
+(function () {
+  const root = document.documentElement;
+  const mq   = window.matchMedia('(prefers-color-scheme: dark)');
+  let theme  = localStorage.getItem('apsipa-theme') || (mq.matches ? 'dark' : 'light');
+  apply(theme, false);
+
+  function apply(t, animate) {
+    theme = t;
+    if (animate) {
+      root.classList.add('theme-transitioning');
+      setTimeout(() => root.classList.remove('theme-transitioning'), 320);
+    }
+    root.setAttribute('data-theme', t);
+    localStorage.setItem('apsipa-theme', t);
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
+  }
+
+  window.toggleTheme = () => apply(theme === 'dark' ? 'light' : 'dark', true);
+  mq.addEventListener('change', e => {
+    if (!localStorage.getItem('apsipa-theme')) apply(e.matches ? 'dark' : 'light', true);
+  });
+})();
 
 // ── Service Worker ─────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
